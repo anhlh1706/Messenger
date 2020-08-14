@@ -70,12 +70,15 @@ private extension LoginViewController {
     
     func setupView() {
         // MARK: - Setup view position
+        let logoSize: CGSize = UIDevice.isIphone8 ? .init(width: 140, height: 140) : .init(width: 180, height: 180)
+        let logoTopSpacing: CGFloat = UIDevice.isIphoneXSeries ? 80 : 50
+        
         view.addSubview(content)
         content.edgeAnchors == view.edgeAnchors
         
         content.addSubview(logo)
-        logo.topAnchor == content.topAnchor + 80
-        logo.sizeAnchors == CGSize(width: 190, height: 190)
+        logo.topAnchor == content.topAnchor + logoTopSpacing
+        logo.sizeAnchors == logoSize
         logo.centerXAnchor == content.centerXAnchor
         
         content.addSubview(emailField)
