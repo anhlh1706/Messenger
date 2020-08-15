@@ -24,6 +24,7 @@ enum Text {
     
     static let login = "Login".localized
     static let loginWithFacebook = "Login with facebook".localized
+    static let loginWithGoogle = "Login with google".localized
     static let signOut = "Sign Out".localized
     static let register = "Register".localized
     

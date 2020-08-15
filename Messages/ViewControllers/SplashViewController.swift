@@ -18,7 +18,8 @@ final class SplashViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .background
         view.addSubview(imv)
-        imv.sizeAnchors == CGSize(width: 200, height: 200)
+        let logoSize: CGSize = UIDevice.isIphone8 ? .init(width: 140, height: 140) : .init(width: 180, height: 180)
+        imv.sizeAnchors == logoSize
         imv.centerAnchors == view.safeAreaLayoutGuide.centerAnchors
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
@@ -29,17 +30,26 @@ final class SplashViewController: UIViewController {
     }
     
     func excuteDisappear() {
+        let isLogedIn = FirebaseAuth.Auth.auth().currentUser != nil
         sleep(1)
+        let targetTopSpacing: CGFloat = UIDevice.isIphoneXSeries ? 80 : 50
+        let currentTopSpacing = imv.frame.origin.y
+        let transform = targetTopSpacing - currentTopSpacing
+        
         UIView.animate(withDuration: 0.5) {
-            self.imv.transform = CGAffineTransform(scaleX: 50, y: 50)
+            self.imv.transform = CGAffineTransform(translationX: 0, y: transform)
+            if isLogedIn {
+                self.imv.alpha = 0
+            }
         }
+        
         let rootVC: UIViewController
         if FirebaseAuth.Auth.auth().currentUser == nil {
             rootVC = NavigationController(rootViewController: LoginViewController())
         } else {
             rootVC = ChatTabbarController()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             AppDelegate.shared.window?.rootViewController = rootVC
         }
         return

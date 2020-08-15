@@ -28,7 +28,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         )
         
         GIDSignIn.sharedInstance()?.clientID = FirebaseApp.app()?.options.clientID
-        GIDSignIn.sharedInstance()?.delegate = self
         
         window = UIWindow(frame: UIScreen.main.bounds)
         start()
@@ -43,22 +42,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func start() {
         window?.rootViewController = NavigationController(rootViewController: SplashViewController())
         window?.makeKeyAndVisible()
-    }
-}
-
-extension AppDelegate: GIDSignInDelegate {
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        guard error == nil else {
-            AppHelper.visibleViewController?.showAlert(title: Text.error, msg: error.localizedDescription)
-            return
-        }
-        
-        guard let authen = user.authentication else { return }
-        let credential = GoogleAuthProvider.credential(withIDToken: authen.idToken,
-                                                       accessToken: authen.accessToken)
-    }
-    
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        print("Google user was disconnected")
     }
 }

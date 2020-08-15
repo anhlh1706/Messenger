@@ -15,6 +15,12 @@ extension UIDevice {
     
     /// Iphone 4.7"
     static let isIphone8 = Screen.height == 667
+    /// Iphone 5.5"
+    static let isIphonePlus = Screen.height == 736
+    /// Iphone 5.8
+    static let isIphoneX = Screen.height == 812
+    /// Iphone 6.5
+    static let isIphoneMax = Screen.height == 896
     ///Included iphone 6Plus, 7Plus, 8Plus, XS Max, 11Pro Max
     static let isIphone414Width = (Screen.width == 414)
     /// Included iphone 6, 7, 8, X, XS, 11Pro

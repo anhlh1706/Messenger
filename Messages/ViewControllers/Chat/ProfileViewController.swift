@@ -10,6 +10,7 @@ import UIKit
 import Anchorage
 import FirebaseAuth
 import FBSDKLoginKit
+import GoogleSignIn
 
 private enum DataSource: Int, CaseIterable {
     case signOut
@@ -76,6 +77,7 @@ extension ProfileViewController: UITableViewDelegate {
             do {
                 try FirebaseAuth.Auth.auth().signOut()
                 FBSDKLoginKit.LoginManager().logOut()
+                GIDSignIn.sharedInstance()?.signOut()
                 AppHelper.showLogin()
             } catch {
                 showAlert(msg: error.localizedDescription)

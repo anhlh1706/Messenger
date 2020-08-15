@@ -28,4 +28,12 @@ final class DatabaseManager {
             "lastName": user.lastName
         ])
     }
+    
+    func insertUserIfNeeded(user: User) {
+        checkEmailIsExists(email: user.email) { [weak self] available in
+            if available {
+                self?.insertUser(user)
+            }
+        }
+    }
 }

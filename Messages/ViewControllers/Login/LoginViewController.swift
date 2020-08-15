@@ -22,7 +22,6 @@ final class LoginViewController: UIViewController {
     }
     
     // MARK: - UI Elements
-    private let content = UIView(backgroundColor: .background)
     private let logo = UIImageView(image: .logo)
     
     private let emailField = TextField(backgroundColor: .subbackground)
@@ -30,10 +29,11 @@ final class LoginViewController: UIViewController {
     
     private let loginButton = Button(type: .contained(rounder: 12, color: .primary), title: Text.login)
     private let fbLoginButton = Button(type: .outlined(rounder: 12, color: .text), title: Text.loginWithFacebook)
+    private let googleLoginButton = Button(type: .outlined(rounder: 12, color: .text), title: Text.loginWithGoogle)
     private let registerButton = Button(type: .contained(rounder: 12, color: .subbackground), title: Text.register)
     
     private lazy var textFields = [emailField, passwordField]
-    private lazy var buttons = [loginButton, fbLoginButton, registerButton]
+    private lazy var buttons = [loginButton, fbLoginButton, googleLoginButton, registerButton]
     
     // MARK: - Properties
     private let animator = UIViewPropertyAnimator(duration: 0.2, curve: .linear)
@@ -42,6 +42,7 @@ final class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.presentingViewController = self
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
@@ -49,13 +50,6 @@ final class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.2) {
-            self.content.transform = .identity
-        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -73,37 +67,39 @@ private extension LoginViewController {
         let logoSize: CGSize = UIDevice.isIphone8 ? .init(width: 140, height: 140) : .init(width: 180, height: 180)
         let logoTopSpacing: CGFloat = UIDevice.isIphoneXSeries ? 80 : 50
         
-        view.addSubview(content)
-        content.edgeAnchors == view.edgeAnchors
-        
-        content.addSubview(logo)
-        logo.topAnchor == content.topAnchor + logoTopSpacing
+        view.addSubview(logo)
+        logo.topAnchor == view.topAnchor + logoTopSpacing
         logo.sizeAnchors == logoSize
-        logo.centerXAnchor == content.centerXAnchor
+        logo.centerXAnchor == view.centerXAnchor
         
-        content.addSubview(emailField)
+        view.addSubview(emailField)
         emailField.topAnchor == logo.bottomAnchor + 20
-        emailField.horizontalAnchors == content.horizontalAnchors + 20
+        emailField.horizontalAnchors == view.horizontalAnchors + 20
         emailField.heightAnchor == 50
         
-        content.addSubview(passwordField)
+        view.addSubview(passwordField)
         passwordField.topAnchor == emailField.bottomAnchor + 3
-        passwordField.horizontalAnchors == content.horizontalAnchors + 20
+        passwordField.horizontalAnchors == view.horizontalAnchors + 20
         passwordField.heightAnchor == 50
         
-        content.addSubview(loginButton)
+        view.addSubview(loginButton)
         loginButton.topAnchor == passwordField.bottomAnchor + 20
-        loginButton.horizontalAnchors == content.horizontalAnchors + 20
+        loginButton.horizontalAnchors == view.horizontalAnchors + 20
         loginButton.heightAnchor == 50
         
-        content.addSubview(fbLoginButton)
+        view.addSubview(fbLoginButton)
         fbLoginButton.topAnchor == loginButton.bottomAnchor + 20
-        fbLoginButton.horizontalAnchors == content.horizontalAnchors + 20
+        fbLoginButton.horizontalAnchors == view.horizontalAnchors + 20
         fbLoginButton.heightAnchor == loginButton.heightAnchor
         
-        content.addSubview(registerButton)
-        registerButton.topAnchor == fbLoginButton.bottomAnchor + 20
-        registerButton.horizontalAnchors == content.horizontalAnchors + 20
+        view.addSubview(googleLoginButton)
+        googleLoginButton.topAnchor == fbLoginButton.bottomAnchor + 5
+        googleLoginButton.horizontalAnchors == view.horizontalAnchors + 20
+        googleLoginButton.heightAnchor == loginButton.heightAnchor
+        
+        view.addSubview(registerButton)
+        registerButton.topAnchor == googleLoginButton.bottomAnchor + 20
+        registerButton.horizontalAnchors == view.horizontalAnchors + 20
         registerButton.heightAnchor == 50
         
         // MARK: - Setup view properties
@@ -111,7 +107,6 @@ private extension LoginViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         view.addGestureRecognizer(tap)
         view.backgroundColor = .background
-        content.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         
         logo.contentMode = .scaleAspectFit
         
@@ -130,6 +125,7 @@ private extension LoginViewController {
         
         loginButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
         fbLoginButton.addTarget(self, action: #selector(fbLoginAction), for: .touchUpInside)
+        googleLoginButton.addTarget(self, action: #selector(ggLoginAction), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(registerAction), for: .touchUpInside)
         
         buttons.forEach { $0.spacing = 1.5 }
@@ -137,10 +133,14 @@ private extension LoginViewController {
         registerButton.setTitleColor(.text, for: .normal)
         
         fbLoginButton.setImage(.iconFacebook, for: .normal)
-        
         fbLoginButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: view.width - 87)
         fbLoginButton.imageView?.contentMode = .scaleAspectFit
         fbLoginButton.tintColor = .text
+        
+        googleLoginButton.setImage(.iconGoogle, for: .normal)
+        googleLoginButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 15, bottom: 10, right: view.width - 87)
+        googleLoginButton.imageView?.contentMode = .scaleAspectFit
+        googleLoginButton.tintColor = .text
         
         updateLoginButtonState()
         
@@ -237,13 +237,14 @@ extension LoginViewController {
             self.hideLoading()
             guard let result = result as? [String: Any], error == nil else { return }
             
-            if let name = result["name"] as? String, let email = result["email"] as? String {
+            if let name = result["name"] as? String,
+               let email = result["email"] as? String {
                 var nameParts = name.split(separator: " ")
                 
                 let firstName = String(nameParts.removeFirst())
                 let lastName = nameParts.joined(separator: " ")
                 let user = User(email: email, firstName: firstName, lastName: lastName)
-                self.insertUserIfNeeded(user: user)
+                DatabaseManager.shared.insertUserIfNeeded(user: user)
             }
             
             self.showLoading()
@@ -251,7 +252,7 @@ extension LoginViewController {
             FirebaseAuth.Auth.auth().signIn(with: credential) { (result, error) in
                 self.hideLoading()
                 guard result != nil, error == nil else {
-                    self.showAlert(msg: error?.localizedDescription)
+                    self.showAlert(title: "\(Text.error)!", msg: error?.localizedDescription)
                     return
                 }
                 
@@ -260,12 +261,10 @@ extension LoginViewController {
         }
     }
     
-    func insertUserIfNeeded(user: User) {
-        DatabaseManager.shared.checkEmailIsExists(email: user.email) { available in
-            if available {
-                DatabaseManager.shared.insertUser(user)
-            }
-        }
+    // MARK: - Google login
+    @objc
+    func ggLoginAction() {
+        GIDSignIn.sharedInstance()?.signIn()
     }
     
     // MARK: - Register
@@ -292,5 +291,43 @@ extension LoginViewController: UITextFieldDelegate {
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         return true
+    }
+}
+
+// MARK: - GIDSignInDelegate
+extension LoginViewController: GIDSignInDelegate {
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        guard error == nil else {
+            print(error.localizedDescription)
+            return
+        }
+        
+        guard let email = user.profile.email,
+              let firstName = user.profile.givenName,
+              let lastName = user.profile.familyName else {
+            return
+        }
+        
+        let userInfo = User(email: email, firstName: firstName, lastName: lastName)
+        DatabaseManager.shared.insertUserIfNeeded(user: userInfo)
+        
+        showLoading()
+        guard let authentication = user.authentication else { return }
+        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
+                                                       accessToken: authentication.accessToken)
+        FirebaseAuth.Auth.auth().signIn(with: credential) { [weak self] (result, error) in
+            self?.hideLoading()
+            guard let self = self else { return }
+            guard result != nil, error == nil else {
+                self.showAlert(title: "", msg: error?.localizedDescription)
+                return
+            }
+            
+            self.showConversation()
+        }
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
+        print("Google user was disconnected")
     }
 }
