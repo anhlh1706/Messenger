@@ -12,8 +12,13 @@ struct User: Decodable {
     let email: String
     let firstName: String
     let lastName: String
+    
     var emailDirectory: String {
         email.replacingOccurrences(of: ".", with: "-").replacingOccurrences(of: "@", with: "-")
+    }
+    
+    var profilePictureFileName: String {
+        "\(emailDirectory)_profile_picture.png"
     }
 }
 

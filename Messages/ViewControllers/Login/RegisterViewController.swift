@@ -240,7 +240,22 @@ private extension RegisterViewController {
                 return
             }
             let user = User(email: self.email, firstName: self.firstName, lastName: self.lastName)
-            DatabaseManager.shared.insertUser(user)
+            DatabaseManager.shared.insertUser(user) { success in
+                if success {
+                    guard let imageData = self.profileImage.pngData() else {
+                        return
+                    }
+                    let fileName = user.profilePictureFileName
+                    StorageManager.shared.uploadProfilePicture(with: imageData, fileName: fileName) { result in
+                        switch result {
+                        case .success(let downloadURL):
+                            UserDefaults.standard.setValue(downloadURL, forKey: kProfilePictureURL)
+                        case .failure(let error):
+                            print(error.localizedDescription)
+                        }
+                    }
+                }
+            }
             self.showAlert(msg: "\(Text.successfully)!") {
                 self.dismiss(animated: true)
             }

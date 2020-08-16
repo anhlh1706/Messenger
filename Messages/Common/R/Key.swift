@@ -15,3 +15,5 @@ let kRefreshToken           = "refreshToken"
 let kExpiresIn              = "refreshIn"
 let kEmail                  = "email"
 let kDeviceToken            = "deviceToken"
+
+let kProfilePictureURL      = "kProfilePictureURL"

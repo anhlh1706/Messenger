@@ -22,17 +22,21 @@ final class DatabaseManager {
         }
     }
     
-    func insertUser(_ user: User) {
+    func insertUser(_ user: User, completion: @escaping (Bool) -> Void) {
         database.child(user.emailDirectory).setValue([
             "firstName": user.firstName,
             "lastName": user.lastName
-        ])
+        ]) { (error, _) in
+            completion(error == nil)
+        }
     }
     
-    func insertUserIfNeeded(user: User) {
+    func insertUserIfNeeded(user: User, completion: @escaping (Bool) -> Void) {
         checkEmailIsExists(email: user.email) { [weak self] available in
             if available {
-                self?.insertUser(user)
+                self?.insertUser(user, completion: { success in
+                    completion(success)
+                })
             }
         }
     }

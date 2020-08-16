@@ -216,6 +216,7 @@ extension LoginViewController {
         loginManager.logIn(permissions: ["email", "public_profile"], from: self) { [weak self] (result, error) in
             guard let self = self else { return }
             self.hideLoading()
+            
             guard error == nil else {
                 self.showAlert(msg: error?.localizedDescription)
                 return
@@ -231,20 +232,25 @@ extension LoginViewController {
     }
     
     func getFacebookUserInfo(withToken token: String) {
-        let fbRequest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields" : "email, name"], tokenString: token, version: nil, httpMethod: .get)
-        self.showLoading()
-        fbRequest.start { (_, result, error) in
+        let fbRequest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields" : "email, first_name, last_name, picture.type(large)"], tokenString: token, version: nil, httpMethod: .get)
+        showLoading()
+        fbRequest.start { [weak self] (_, result, error) in
+            guard let self = self else { return }
             self.hideLoading()
+            
             guard let result = result as? [String: Any], error == nil else { return }
             
-            if let name = result["name"] as? String,
-               let email = result["email"] as? String {
-                var nameParts = name.split(separator: " ")
-                
-                let firstName = String(nameParts.removeFirst())
-                let lastName = nameParts.joined(separator: " ")
+            if let firstName = result["first_name"] as? String,
+               let lastName = result["last_name"] as? String,
+               let email = result["email"] as? String,
+               let picture = result["picture"] as? [String: Any?],
+               let pictureData = picture["data"] as? [String: Any?],
+               let pictureUrlStr = pictureData["url"] as? String {
                 let user = User(email: email, firstName: firstName, lastName: lastName)
-                DatabaseManager.shared.insertUserIfNeeded(user: user)
+                DatabaseManager.shared.insertUserIfNeeded(user: user, completion: { success in
+                    guard success else { return }
+                    self.uploadProfilePicture(urlStr: pictureUrlStr, fileName: user.profilePictureFileName)
+                })
             }
             
             self.showLoading()
@@ -271,6 +277,23 @@ extension LoginViewController {
     @objc
     func registerAction() {
         present(RegisterViewController(), animated: true)
+    }
+    
+    func uploadProfilePicture(urlStr: String, fileName: String) {
+        guard let url = URL(string: urlStr) else { return }
+        URLSession.shared.dataTask(with: url) { (data, _, _) in
+            guard let imageData = data else {
+                return
+            }
+            StorageManager.shared.uploadProfilePicture(with: imageData, fileName: fileName) { result in
+                switch result {
+                case .success(let downloadURL):
+                    UserDefaults.standard.setValue(downloadURL, forKey: kProfilePictureURL)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
+        }.resume()
     }
 }
 
@@ -309,7 +332,12 @@ extension LoginViewController: GIDSignInDelegate {
         }
         
         let userInfo = User(email: email, firstName: firstName, lastName: lastName)
-        DatabaseManager.shared.insertUserIfNeeded(user: userInfo)
+        DatabaseManager.shared.insertUserIfNeeded(user: userInfo, completion: { success in
+            if user.profile.hasImage && success {
+                guard let url = user.profile.imageURL(withDimension: 300) else { return }
+                self.uploadProfilePicture(urlStr: url.absoluteString, fileName: userInfo.profilePictureFileName)
+            }
+        })
         
         showLoading()
         guard let authentication = user.authentication else { return }
