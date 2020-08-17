@@ -8,10 +8,22 @@
 
 import UIKit
 import Anchorage
+import SDWebImage
 
 final class ChatListViewController: UIViewController {
     
     private let tableView = UITableView(frame: .zero, style: .plain)
+    
+    let user: User
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +52,19 @@ private extension ChatListViewController {
         tableView.dataSource = self
         
         let rightBarButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(didTapCompose))
+        rightBarButton.style = .done
         rightBarButton.tintColor = .text
         navigationItem.rightBarButtonItem = rightBarButton
+        
+        let profileImageView = UIImageView(image: .iconUser)
+        profileImageView.cornerRadius = 15
+        profileImageView.contentMode = .scaleAspectFit
+        profileImageView.sizeAnchors == CGSize(width: 30, height: 30)
+        if let profileURL = user.profileURLString {
+            profileImageView.sd_setImage(with: URL(string: profileURL))
+        }
+        let leftBarButton = UIBarButtonItem(customView: profileImageView)
+        navigationItem.leftBarButtonItem = leftBarButton
     }
     
     func showChat(atIndex index: Int) {

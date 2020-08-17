@@ -172,8 +172,9 @@ private extension LoginViewController {
         animator.startAnimation()
     }
     
-    func showConversation() {
-        let chatTabbar = ChatTabbarController()
+    func showConversation(user: User) {
+        UserDefaults.standard.set(user.email, forKey: kCurrentUserEmail)
+        let chatTabbar = ChatTabbarController(user: user)
         navigationController?.pushViewController(chatTabbar, animated: true)
         DispatchQueue.main.async {
             self.navigationController?.viewControllers = [chatTabbar]
@@ -195,12 +196,15 @@ extension LoginViewController {
             guard let self = self else { return }
             self.hideLoading()
             
-            guard result != nil, error == nil else {
+            guard let email = result?.user.email, error == nil else {
                 self.showAlert(title: "\(Text.error)!", msg: error?.localizedDescription)
                 return
             }
-            
-            self.showConversation()
+            DatabaseManager.shared.getUser(forEmail: email) { user in
+                if let user = user {
+                    self.showConversation(user: user)
+                }
+            }
         }
     }
     
@@ -240,18 +244,19 @@ extension LoginViewController {
             
             guard let result = result as? [String: Any], error == nil else { return }
             
-            if let firstName = result["first_name"] as? String,
-               let lastName = result["last_name"] as? String,
-               let email = result["email"] as? String,
-               let picture = result["picture"] as? [String: Any?],
-               let pictureData = picture["data"] as? [String: Any?],
-               let pictureUrlStr = pictureData["url"] as? String {
-                let user = User(email: email, firstName: firstName, lastName: lastName)
-                DatabaseManager.shared.insertUserIfNeeded(user: user, completion: { success in
-                    guard success else { return }
-                    self.uploadProfilePicture(urlStr: pictureUrlStr, fileName: user.profilePictureFileName)
-                })
+            guard let firstName = result["first_name"] as? String,
+                let lastName = result["last_name"] as? String,
+                let email = result["email"] as? String else {
+                    return
             }
+            var user = User(email: email, firstName: firstName, lastName: lastName)
+            if let picture = result["picture"] as? [String: Any?],
+                let pictureData = picture["data"] as? [String: Any?],
+                let pictureUrlStr = pictureData["url"] as? String {
+                user.profileURLString = pictureUrlStr
+                self.uploadProfilePicture(ofUser: user)
+            }
+            DatabaseManager.shared.insertUserIfNeeded(user: user)
             
             self.showLoading()
             let credential = FacebookAuthProvider.credential(withAccessToken: token)
@@ -262,7 +267,7 @@ extension LoginViewController {
                     return
                 }
                 
-                self.showConversation()
+                self.showConversation(user: user)
             }
         }
     }
@@ -331,13 +336,13 @@ extension LoginViewController: GIDSignInDelegate {
             return
         }
         
-        let userInfo = User(email: email, firstName: firstName, lastName: lastName)
-        DatabaseManager.shared.insertUserIfNeeded(user: userInfo, completion: { success in
-            if user.profile.hasImage && success {
-                guard let url = user.profile.imageURL(withDimension: 300) else { return }
-                self.uploadProfilePicture(urlStr: url.absoluteString, fileName: userInfo.profilePictureFileName)
-            }
-        })
+        var userInfo = User(email: email, firstName: firstName, lastName: lastName)
+        DatabaseManager.shared.insertUserIfNeeded(user: userInfo)
+        if user.profile.hasImage {
+            guard let url = user.profile.imageURL(withDimension: 300) else { return }
+            userInfo.profileURLString = url.absoluteString
+            self.uploadProfilePicture(ofUser: userInfo)
+        }
         
         showLoading()
         guard let authentication = user.authentication else { return }
@@ -351,7 +356,7 @@ extension LoginViewController: GIDSignInDelegate {
                 return
             }
             
-            self.showConversation()
+            self.showConversation(user: userInfo)
         }
     }
     

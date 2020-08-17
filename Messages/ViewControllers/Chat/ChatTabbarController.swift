@@ -10,6 +10,17 @@ import UIKit
 
 final class ChatTabbarController: UITabBarController {
     
+    let user: User
+    
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tabBar.tintColor = .primary
@@ -19,7 +30,7 @@ final class ChatTabbarController: UITabBarController {
         
         let tabBarIconSize = CGSize(width: 30, height: 30)
         
-        let chatsVC         = ChatListViewController()
+        let chatsVC         = ChatListViewController(user: user)
         let profileVC       = ProfileViewController()
         
         chatsVC.tabBarItem    = UITabBarItem(title: Text.chats, image: UIImage.logo.scaleToFit(size: tabBarIconSize), tag: 0)

@@ -30,28 +30,40 @@ final class SplashViewController: UIViewController {
     }
     
     func excuteDisappear() {
+        var rootVC: UIViewController = NavigationController(rootViewController: LoginViewController())
+        if FirebaseAuth.Auth.auth().currentUser != nil {
+            if let email = UserDefaults.standard.string(forKey: kCurrentUserEmail) {
+                DatabaseManager.shared.getUser(forEmail: email) { user in
+                    if let user = user {
+                        rootVC = ChatTabbarController(user: user)
+                    } else {
+                        rootVC = NavigationController(rootViewController: LoginViewController())
+                    }
+                    self.animation()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                        AppDelegate.shared.window?.rootViewController = rootVC
+                    }
+                }
+                return
+            }
+        }
+        animation()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            AppDelegate.shared.window?.rootViewController = rootVC
+        }
+        return
+    }
+    
+    func animation() {
         let isLogedIn = FirebaseAuth.Auth.auth().currentUser != nil
-        sleep(1)
         let targetTopSpacing: CGFloat = UIDevice.isIphoneXSeries ? 80 : 50
         let currentTopSpacing = imv.frame.origin.y
         let transform = targetTopSpacing - currentTopSpacing
-        
         UIView.animate(withDuration: 0.5) {
             self.imv.transform = CGAffineTransform(translationX: 0, y: transform)
             if isLogedIn {
                 self.imv.alpha = 0
             }
         }
-        
-        let rootVC: UIViewController
-        if FirebaseAuth.Auth.auth().currentUser == nil {
-            rootVC = NavigationController(rootViewController: LoginViewController())
-        } else {
-            rootVC = ChatTabbarController()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-            AppDelegate.shared.window?.rootViewController = rootVC
-        }
-        return
     }
 }
