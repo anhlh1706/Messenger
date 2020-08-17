@@ -25,14 +25,18 @@ struct Sender: SenderType {
 final class ChatViewController: MessagesViewController {
     
     private var messages = [Message]()
-    private let selfSender = Sender(senderId: "1", displayName: "Hoang Anh", photoURL: "")
     
     private let me: User
-    private let parner: User
+    private let partner: User
     
-    init(me: User, parner: User) {
+    private let meSender: Sender
+    private let partnerSender: Sender
+    
+    init(me: User, partner: User) {
         self.me = me
-        self.parner = parner
+        self.partner = partner
+        meSender = Sender(senderId: me.email, displayName: me.lastName, photoURL: me.profileURLString ?? "")
+        partnerSender = Sender(senderId: partner.email, displayName: partner.lastName, photoURL: partner.profileURLString ?? "")
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -43,16 +47,18 @@ final class ChatViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        messages.append(Message(sender: selfSender, messageId: "1", sentDate: Date(), kind: .text("Hello world!")))
-        messages.append(Message(sender: selfSender, messageId: "2", sentDate: Date(), kind: .text("Hi, world!")))
+        messages.append(Message(sender: meSender, messageId: "1", sentDate: Date(), kind: .text("Hello world!")))
+        messages.append(Message(sender: partnerSender, messageId: "2", sentDate: Date(), kind: .text("Hi, world!")))
         
-        title = selfSender.displayName
+        title = partnerSender.displayName
         view.backgroundColor = .background
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
     }
+    
 }
+
 
 extension ChatViewController: MessagesLayoutDelegate {
     
@@ -60,7 +66,7 @@ extension ChatViewController: MessagesLayoutDelegate {
 
 extension ChatViewController: MessagesDataSource {
     func currentSender() -> SenderType {
-        selfSender
+        meSender
     }
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageType {
@@ -70,7 +76,6 @@ extension ChatViewController: MessagesDataSource {
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
         messages.count
     }
-    
     
 }
 

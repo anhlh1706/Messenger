@@ -10,7 +10,7 @@ import UIKit
 import Anchorage
 
 protocol NewChatDelegate: AnyObject {
-    func didSelectPatner(patner: User)
+    func didSelectPatner(partner: User)
 }
 
 final class NewChatViewController: UIViewController {
@@ -103,7 +103,7 @@ extension NewChatViewController: UITableViewDataSource {
 extension NewChatViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelectPatner(patner: users[indexPath.row])
+        delegate?.didSelectPatner(partner: users[indexPath.row])
         dismiss(animated: true)
     }
 }

@@ -12,10 +12,19 @@ import SDWebImage
 
 final class ChatListViewController: UIViewController {
     
+    override var hidesBottomBarWhenPushed: Bool {
+        get {
+            return navigationController?.topViewController != self
+        }
+        set {
+            super.hidesBottomBarWhenPushed = newValue
+        }
+    }
+    
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     let user: User
-    var patners = [User]()
+    var partners = [User]()
     
     init(user: User) {
         self.user = user
@@ -68,8 +77,8 @@ private extension ChatListViewController {
         navigationItem.leftBarButtonItem = leftBarButton
     }
     
-    func showChat(patner: User) {
-        let chatVC = ChatViewController(me: user, parner: patner)
+    func showChat(partner: User) {
+        let chatVC = ChatViewController(me: user, partner: partner)
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
@@ -84,7 +93,7 @@ private extension ChatListViewController {
 // MARK: - UITableViewDataSource
 extension ChatListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let patner = patners[indexPath.row]
+        let patner = partners[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.selectionStyle = .none
@@ -94,7 +103,7 @@ extension ChatListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return patners.count
+        return partners.count
     }
 }
 
@@ -102,14 +111,14 @@ extension ChatListViewController: UITableViewDataSource {
 extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showChat(patner: patners[indexPath.row])
+        showChat(partner: partners[indexPath.row])
     }
 }
 
 // MARK: - NewChatDelegate
 extension ChatListViewController: NewChatDelegate {
-    func didSelectPatner(patner: User) {
-        showChat(patner: patner)
+    func didSelectPatner(partner: User) {
+        showChat(partner: partner)
     }
     
 }
