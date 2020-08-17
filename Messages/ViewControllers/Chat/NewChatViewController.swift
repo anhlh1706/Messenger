@@ -9,10 +9,16 @@
 import UIKit
 import Anchorage
 
+protocol NewChatDelegate: AnyObject {
+    func didSelectPatner(patner: User)
+}
+
 final class NewChatViewController: UIViewController {
     
     let tableView = UITableView(frame: .zero, style: .plain)
     let searchBar = UISearchBar()
+    
+    weak var delegate: NewChatDelegate?
     
     var users = [User]() {
         didSet {
@@ -40,10 +46,12 @@ final class NewChatViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.register(cell: IconTextTableCell.self)
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.separatorStyle = .none
         
         searchBar.delegate = self
         searchBar.placeholder = "Search"
+        searchBar.tintColor = .text
         
         let rightBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(dismissSelf))
         rightBarButton.tintColor = .text
@@ -81,10 +89,21 @@ extension NewChatViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let user = users[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.render(title: user.email, subTitle: user.firstName, iconUrl: user.profileURLString)
+        cell.iconCornerRadius = 20
+        cell.selectionStyle = .none
+        
         return cell
     }
-    
-    
+}
+
+// MARK: - UITableViewDelegate
+extension NewChatViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.didSelectPatner(patner: users[indexPath.row])
+        dismiss(animated: true)
+    }
 }

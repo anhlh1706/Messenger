@@ -15,6 +15,7 @@ final class ChatListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     let user: User
+    var patners = [User]()
     
     init(user: User) {
         self.user = user
@@ -67,14 +68,15 @@ private extension ChatListViewController {
         navigationItem.leftBarButtonItem = leftBarButton
     }
     
-    func showChat(atIndex index: Int) {
-        let chatVC = ChatViewController()
+    func showChat(patner: User) {
+        let chatVC = ChatViewController(me: user, parner: patner)
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
     @objc
     func didTapCompose() {
         let newChatVC = NewChatViewController()
+        newChatVC.delegate = self
         present(NavigationController(rootViewController: newChatVC), animated: true)
     }
 }
@@ -82,14 +84,17 @@ private extension ChatListViewController {
 // MARK: - UITableViewDataSource
 extension ChatListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let patner = patners[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.selectionStyle = .none
+        cell.render(title: patner.email, subTitle: patner.firstName, iconUrl: patner.profileURLString)
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return patners.count
     }
 }
 
@@ -97,6 +102,14 @@ extension ChatListViewController: UITableViewDataSource {
 extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showChat(atIndex: indexPath.row)
+        showChat(patner: patners[indexPath.row])
     }
+}
+
+// MARK: - NewChatDelegate
+extension ChatListViewController: NewChatDelegate {
+    func didSelectPatner(patner: User) {
+        showChat(patner: patner)
+    }
+    
 }

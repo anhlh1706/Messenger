@@ -47,6 +47,12 @@ final class IconTextTableCell: UITableViewCell {
         }
     }
     
+    var iconCornerRadius: CGFloat = 0 {
+        didSet {
+            iconImageView.cornerRadius = iconCornerRadius
+        }
+    }
+    
     func render(title: String, subTitle: String? = nil, icon: UIImage? = nil, iconUrl: String? = nil) {
         self.title = title
         self.subTitle = subTitle

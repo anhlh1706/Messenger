@@ -26,6 +26,20 @@ final class ChatViewController: MessagesViewController {
     
     private var messages = [Message]()
     private let selfSender = Sender(senderId: "1", displayName: "Hoang Anh", photoURL: "")
+    
+    private let me: User
+    private let parner: User
+    
+    init(me: User, parner: User) {
+        self.me = me
+        self.parner = parner
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

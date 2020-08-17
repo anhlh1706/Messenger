@@ -398,8 +398,8 @@
 				E6D65B8F24E63EDD001182DC /* ChatListViewController.swift */,
 				E6BCFE2524E79E5F00599C35 /* ChatViewController.swift */,
 				E6CAE2B524E6791F00AB8B2E /* ProfileViewController.swift */,
-				E6CAE2B324E678C600AB8B2E /* ChatTabbarController.swift */,
 				E6BCFE2724E7A19000599C35 /* NewChatViewController.swift */,
+				E6CAE2B324E678C600AB8B2E /* ChatTabbarController.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";

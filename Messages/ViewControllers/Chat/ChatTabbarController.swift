@@ -27,6 +27,7 @@ final class ChatTabbarController: UITabBarController {
         tabBar.barTintColor = .background
         tabBar.shadowImage = UIImage()
         tabBar.backgroundImage = UIImage()
+        hidesBottomBarWhenPushed = true
         
         let tabBarIconSize = CGSize(width: 30, height: 30)
         
@@ -71,4 +72,3 @@ final class TabBarAnimatedTransitioning: NSObject, UIViewControllerAnimatedTrans
         return 0.1
     }
 }
-
