@@ -40,3 +40,8 @@ struct User: Decodable {
     }
 }
 
+extension User: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.email == rhs.email
+    }
+}

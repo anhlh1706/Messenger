@@ -73,4 +73,19 @@ final class DatabaseManager {
             }
         }
     }
+    
+    func getUsers(filterEmail email: String = "", completion: @escaping ([User]) -> Void) {
+        database.child("users").observeSingleEvent(of: .value, with: { snapshot in
+            guard let value = snapshot.value as? [[String: String]] else {
+                completion([])
+                return
+            }
+            if email.isEmpty {
+                completion(value.compactMap { User(directory: $0) })
+            } else {
+                let filteredValue = value.filter { $0["email"]?.lowercased().contains(email.lowercased()) ?? false }
+                completion(filteredValue.compactMap { User(directory: $0) })
+            }
+        })
+    }
 }
