@@ -13,6 +13,7 @@ import FirebaseAuth
 final class DatabaseManager {
     
     static let shared = DatabaseManager()
+    private lazy var usersDirectory = database.child("users")
     
     private let database = Database.database().reference()
     
@@ -22,21 +23,53 @@ final class DatabaseManager {
         }
     }
     
-    func insertUser(_ user: User, completion: @escaping (Bool) -> Void) {
-        database.child(user.emailDirectory).setValue([
-            "firstName": user.firstName,
-            "lastName": user.lastName
-        ]) { (error, _) in
-            completion(error == nil)
-        }
+    func getUser(forEmail email: String, completion: @escaping (User?) -> Void) {
+        usersDirectory.observeSingleEvent(of: .value, with: { snapshot in
+            if let value = snapshot.value as? [[String: String]] {
+                if let userDirectory = value.first(where: { $0["email"]?.lowercased() == email.lowercased() }) {
+                    completion(User(directory: userDirectory))
+                    return
+                }
+            }
+            completion(nil)
+        })
     }
     
-    func insertUserIfNeeded(user: User, completion: @escaping (Bool) -> Void) {
+    func insertUser(_ user: User) {
+        var newElement = [
+            "email": user.email,
+            "firstName": user.firstName,
+            "lastName": user.lastName
+        ]
+        if let url = user.profileURLString {
+            newElement["profileImage"] = url
+        }
+        
+        usersDirectory.observeSingleEvent(of: .value, with: { snapshot in
+            if var value = snapshot.value as? [[String: String]] {
+                value.append(newElement)
+                self.usersDirectory.setValue(value)
+            } else {
+                self.usersDirectory.setValue([newElement])
+            }
+        })
+        
+    }
+    
+    func insertProfileImageURL(_ urlStr: String, to user: User) {
+        usersDirectory.observeSingleEvent(of: .value, with: { snapshot in
+            if var value = snapshot.value as? [[String: String]],
+                let userIndex = value.firstIndex(where: { $0["email"] == user.email }) {
+                value[userIndex]["profileImage"] = urlStr
+                self.usersDirectory.setValue(value)
+            }
+        })
+    }
+    
+    func insertUserIfNeeded(user: User) {
         checkEmailIsExists(email: user.email) { [weak self] available in
             if available {
-                self?.insertUser(user, completion: { success in
-                    completion(success)
-                })
+                self?.insertUser(user)
             }
         }
     }

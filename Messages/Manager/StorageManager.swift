@@ -15,24 +15,38 @@ final class StorageManager {
     
     private let storage = Storage.storage().reference()
     
-    func uploadProfilePicture(with data: Data, fileName: String, completion: @escaping (Result<String, Error>) -> Void) {
-        storage.child("images/\(fileName)").putData(data, metadata: nil) { (data, error) in
-            if let error = error {
-                completion(.failure(error))
-                return
-            }
-            
-            self.storage.child("images/\(fileName)").downloadURL { (url, error) in
-                guard let url = url else {
-                    if let error = error {
-                        completion(.failure(error))
-                    } else {
-                        completion(.success(""))
-                    }
-                    return 
+    func uploadProfilePicture(with data: Data, user: User) {
+        let path = fullPath(forFileName: user.profilePictureFileName)
+        storage.child(path).putData(data, metadata: nil) { (data, error) in
+            self.storage.child(path).downloadURL { (url, error) in
+                if let urlStr = url?.absoluteString {
+                    DatabaseManager.shared.insertProfileImageURL(urlStr, to: user)
                 }
-                completion(.success(url.absoluteString))
             }
         }
+    }
+    
+    /// Get url to download picture for the path in firebase directory
+    func downloadURL(forFileName fileName: String, completion: @escaping (Result<URL, Error>) -> Void) {
+        let path = fullPath(forFileName: fileName)
+        
+        let reference = storage.child(path)
+        reference.downloadURL { (url, error) in
+            guard let url = url else {
+                if let error = error {
+                    completion(.failure(error))
+                }
+                return
+            }
+            completion(.success(url))
+        }
+    }
+    
+    func profileFileName(forEmail email: String) -> String {
+        email.replacingOccurrences(of: ".", with: "-").replacingOccurrences(of: "@", with: "-")
+    }
+    
+    private func fullPath(forFileName fileName: String) -> String {
+        "images/\(fileName)"
     }
 }

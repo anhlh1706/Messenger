@@ -284,19 +284,12 @@ extension LoginViewController {
         present(RegisterViewController(), animated: true)
     }
     
-    func uploadProfilePicture(urlStr: String, fileName: String) {
+    func uploadProfilePicture(ofUser user: User) {
+        guard let urlStr = user.profileURLString else { return }
         guard let url = URL(string: urlStr) else { return }
         URLSession.shared.dataTask(with: url) { (data, _, _) in
-            guard let imageData = data else {
-                return
-            }
-            StorageManager.shared.uploadProfilePicture(with: imageData, fileName: fileName) { result in
-                switch result {
-                case .success(let downloadURL):
-                    UserDefaults.standard.setValue(downloadURL, forKey: kProfilePictureURL)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
+            if let imageData = data {
+                StorageManager.shared.uploadProfilePicture(with: imageData, user: user)
             }
         }.resume()
     }
