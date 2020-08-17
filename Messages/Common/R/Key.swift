@@ -13,7 +13,6 @@ let kAccessToken            = "accessToken"
 let kTokenType              = "tokenType"
 let kRefreshToken           = "refreshToken"
 let kExpiresIn              = "refreshIn"
-let kEmail                  = "email"
+let kCurrentUserEmail       = "currentUserEmail"
 let kDeviceToken            = "deviceToken"
 
-let kProfilePictureURL      = "kProfilePictureURL"
