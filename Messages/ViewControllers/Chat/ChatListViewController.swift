@@ -92,7 +92,7 @@ private extension ChatListViewController {
     
     @objc
     func didTapCompose() {
-        let newChatVC = NewChatViewController()
+        let newChatVC = NewChatViewController(currentEmail: user.email)
         newChatVC.delegate = self
         present(NavigationController(rootViewController: newChatVC), animated: true)
     }

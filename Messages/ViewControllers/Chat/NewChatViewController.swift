@@ -36,8 +36,18 @@ final class NewChatViewController: UIViewController {
             tableView.endUpdates()
         }
     }
+    private let currentEmail: String
     
     weak var delegate: NewChatDelegate?
+    
+    init(currentEmail: String) {
+        self.currentEmail = currentEmail
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,8 +79,8 @@ private extension NewChatViewController {
     func search(email: String) {
         if users.isEmpty {
             DatabaseManager.shared.getAllUsers { users in
-                self.users = users
-                self.filteredUsers = users
+                self.users = users.filter { $0.email != self.currentEmail }
+                self.filteredUsers = self.users
             }
         } else {
             if email.isEmpty {

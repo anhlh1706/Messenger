@@ -52,7 +52,7 @@ final class ChatViewController: MessagesViewController {
 private extension ChatViewController {
     
     func setupView() {
-        title = partnerSender.displayName
+        title = partner.firstName + " " + partner.lastName
         view.backgroundColor = .background
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
