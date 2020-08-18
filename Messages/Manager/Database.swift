@@ -142,7 +142,7 @@ extension DatabaseManager {
             "content": content,
             "name": message.sender.displayName,
             "photoUrl": fromUser.profileURLString ?? "",
-            "type": "text",
+            "type": message.kind.description,
             "sentDate": dateString
         ]
         
