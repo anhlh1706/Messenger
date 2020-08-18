@@ -31,7 +31,7 @@ final class NewChatViewController: UIViewController {
             let indexPathsDelete = removeIndexes.map { IndexPath(row: $0.offset, section: 0) }
             
             tableView.beginUpdates()
-            tableView.insertRows(at: indexPathsInsert, with: .bottom)
+            tableView.insertRows(at: indexPathsInsert, with: .top)
             tableView.deleteRows(at: indexPathsDelete, with: .top)
             tableView.endUpdates()
         }
