@@ -173,7 +173,6 @@ private extension LoginViewController {
     }
     
     func showConversation(user: User) {
-        UserDefaults.standard.set(user.email, forKey: kCurrentUserEmail)
         let chatTabbar = ChatTabbarController(user: user)
         navigationController?.pushViewController(chatTabbar, animated: true)
         DispatchQueue.main.async {
@@ -202,6 +201,7 @@ extension LoginViewController {
             }
             DatabaseManager.shared.getUser(forEmail: email) { user in
                 if let user = user {
+                    UserManager.shared.login(user: user)
                     self.showConversation(user: user)
                 }
             }

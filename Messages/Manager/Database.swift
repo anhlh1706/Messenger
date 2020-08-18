@@ -156,17 +156,17 @@ extension DatabaseManager {
                 "lastMessage": content,
                 "lastUpdated": dateString,
             ]
-            var newMeChat = newChat
-            newMeChat["partnerEmail"] = receiverEmail
-            newMeChat["partnerImage"] = toUser.profileURLString ?? ""
-            newMeChat["partnerName"] = toUser.fullName
+            var newSelfChat = newChat
+            newSelfChat["partnerEmail"] = receiverEmail
+            newSelfChat["partnerImage"] = toUser.profileURLString ?? ""
+            newSelfChat["partnerName"] = toUser.fullName
             
             var newPartnerChat  = newChat
             newPartnerChat["partnerEmail"] = senderEmail
             newPartnerChat["partnerImage"] = fromUser.profileURLString ?? ""
             newPartnerChat["partnerName"] = fromUser.fullName
             
-            addChat(toEmail: senderEmail, chatValue: newMeChat)
+            addChat(toEmail: senderEmail, chatValue: newSelfChat)
             addChat(toEmail: receiverEmail, chatValue: newPartnerChat)
             
             addMessage(toChatId: newChatId, messageData: messageData)
@@ -175,7 +175,7 @@ extension DatabaseManager {
     }
     
     func getAllChats(fromEmail email: String, completion: @escaping ([Chat]) -> Void) {
-        chatsDirectory.child(directory(forEmail: email)).observeSingleEvent(of: .value) { snapshot in
+        chatsDirectory.child(directory(forEmail: email)).observe(.value) { snapshot in
             if let value = snapshot.value as? [[String: String]] {
                 completion(value.compactMap { Chat(directory: $0) }.reversed())
             } else {
@@ -185,7 +185,7 @@ extension DatabaseManager {
     }
     
     func getAllMessages(ofChatId chatId: String, completion: @escaping ([Message]) -> Void) {
-        messagesDirectory.child(chatId).observeSingleEvent(of: .value) { snapshot in
+        messagesDirectory.child(chatId).observe(.value) { snapshot in
             if let value = snapshot.value as? [[String: String]] {
                 completion(value.compactMap { Message(directory: $0) })
             } else {

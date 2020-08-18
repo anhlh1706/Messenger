@@ -13,6 +13,5 @@ let kAccessToken            = "accessToken"
 let kTokenType              = "tokenType"
 let kRefreshToken           = "refreshToken"
 let kExpiresIn              = "refreshIn"
-let kCurrentUserEmail       = "currentUserEmail"
 let kDeviceToken            = "deviceToken"
 

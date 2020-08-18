@@ -26,32 +26,30 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        excuteDisappear()
+        setupUserData()
     }
     
-    func excuteDisappear() {
-        var rootVC: UIViewController = NavigationController(rootViewController: LoginViewController())
-        if FirebaseAuth.Auth.auth().currentUser != nil {
-            if let email = UserDefaults.standard.string(forKey: kCurrentUserEmail) {
-                DatabaseManager.shared.getUser(forEmail: email) { user in
-                    if let user = user {
-                        rootVC = ChatTabbarController(user: user)
-                    } else {
-                        rootVC = NavigationController(rootViewController: LoginViewController())
-                    }
-                    self.animation()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                        AppDelegate.shared.window?.rootViewController = rootVC
-                    }
+    func setupUserData() {
+        if UserManager.shared.isLogedIn, let currentEmail = UserManager.shared.currentEmail {
+            DatabaseManager.shared.getUser(forEmail: currentEmail) { user in
+                if let user = user {
+                    UserManager.shared.user = user
+                    self.animationDisapear(toRoot: ChatTabbarController(user: user))
+                } else {
+                    UserManager.shared.logout()
                 }
-                return
             }
+        } else {
+            let loginNav = NavigationController(rootViewController: LoginViewController())
+            animationDisapear(toRoot: loginNav)
         }
+    }
+    
+    func animationDisapear(toRoot rootVC: UIViewController) {
         animation()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             AppDelegate.shared.window?.rootViewController = rootVC
         }
-        return
     }
     
     func animation() {

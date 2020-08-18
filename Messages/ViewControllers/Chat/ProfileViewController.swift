@@ -74,14 +74,7 @@ extension ProfileViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         switch dataSource[indexPath.row] {
         case .signOut:
-            do {
-                try FirebaseAuth.Auth.auth().signOut()
-                FBSDKLoginKit.LoginManager().logOut()
-                GIDSignIn.sharedInstance()?.signOut()
-                AppHelper.showLogin()
-            } catch {
-                showAlert(msg: error.localizedDescription)
-            }
+            UserManager.shared.logout()
         }
     }
 }
