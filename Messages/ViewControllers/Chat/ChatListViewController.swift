@@ -107,7 +107,11 @@ extension ChatListViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.selectionStyle = .none
-        cell.render(title: chat.partnerName, subTitle: chat.lastMessage, iconUrl: chat.partnerImage)
+        
+        let dateCurrentFormat = DateFormatter.fullStyle().date(from: chat.lastUpdated) ?? Date()
+        let lastUpdate = DateFormatter.textStyle().string(from: dateCurrentFormat)
+        let sideInfo = chat.lastMessage + "  .  " + lastUpdate
+        cell.render(title: chat.partnerName, subTitle: sideInfo, iconUrl: chat.partnerImage)
         cell.iconCornerRadius = 25
         cell.iconSize = CGSize(width: 50, height: 50)
         cell.style = .boldTitle

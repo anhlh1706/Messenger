@@ -177,7 +177,7 @@ extension DatabaseManager {
     func getAllChats(fromEmail email: String, completion: @escaping ([Chat]) -> Void) {
         chatsDirectory.child(directory(forEmail: email)).observeSingleEvent(of: .value) { snapshot in
             if let value = snapshot.value as? [[String: String]] {
-                completion(value.compactMap { Chat(directory: $0) })
+                completion(value.compactMap { Chat(directory: $0) }.reversed())
             } else {
                 completion([])
             }
