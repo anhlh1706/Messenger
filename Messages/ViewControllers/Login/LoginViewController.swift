@@ -179,6 +179,16 @@ private extension LoginViewController {
             self.navigationController?.viewControllers = [chatTabbar]
         }
     }
+    
+    func handlerLogin(user: User?, error: Error?) {
+        guard error == nil else {
+            showAlert(title: "\(Text.error)!", msg: error?.localizedDescription)
+            return
+        }
+        if let user = user {
+            showConversation(user: user)
+        }
+    }
 }
 
 // MARK: - Actions
@@ -188,87 +198,24 @@ extension LoginViewController {
     // MARK: - Email login
     @objc
     func loginAction() {
-        showLoading()
         let email = emailField.text ?? ""
         let password = passwordField.text ?? ""
-        FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { [weak self] (result, error) in
+        showLoading()
+        UserManager.shared.loginEmail(email, password: password) { [weak self] (user, error) in
             guard let self = self else { return }
             self.hideLoading()
-            
-            guard let email = result?.user.email, error == nil else {
-                self.showAlert(title: "\(Text.error)!", msg: error?.localizedDescription)
-                return
-            }
-            DatabaseManager.shared.getUser(forEmail: email) { user in
-                if let user = user {
-                    UserManager.shared.login(user: user)
-                    self.showConversation(user: user)
-                }
-            }
+            self.handlerLogin(user: user, error: error)
         }
     }
     
     // MARK: - Facebook login
     @objc
     func fbLoginAction() {
-        let loginManager = LoginManager()
-        
-        if AccessToken.current != nil {
-            loginManager.logOut()
-        }
         showLoading()
-        loginManager.logIn(permissions: ["email", "public_profile"], from: self) { [weak self] (result, error) in
+        UserManager.shared.loginFacebook(in: self) { [weak self] (user, error) in
             guard let self = self else { return }
             self.hideLoading()
-            
-            guard error == nil else {
-                self.showAlert(msg: error?.localizedDescription)
-                return
-            }
-            
-            guard let result = result,
-                  let token = result.token?.tokenString,
-                  !result.isCancelled else {
-                return
-            }
-            self.getFacebookUserInfo(withToken: token)
-        }
-    }
-    
-    func getFacebookUserInfo(withToken token: String) {
-        let fbRequest = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields" : "email, first_name, last_name, picture.type(large)"], tokenString: token, version: nil, httpMethod: .get)
-        showLoading()
-        fbRequest.start { [weak self] (_, result, error) in
-            guard let self = self else { return }
-            self.hideLoading()
-            
-            guard let result = result as? [String: Any], error == nil else { return }
-            
-            guard let firstName = result["first_name"] as? String,
-                let lastName = result["last_name"] as? String,
-                let email = result["email"] as? String else {
-                    return
-            }
-            var user = User(email: email, firstName: firstName, lastName: lastName)
-            if let picture = result["picture"] as? [String: Any?],
-                let pictureData = picture["data"] as? [String: Any?],
-                let pictureUrlStr = pictureData["url"] as? String {
-                user.profileURLString = pictureUrlStr
-                self.uploadProfilePicture(ofUser: user)
-            }
-            DatabaseManager.shared.insertUserIfNeeded(user: user)
-            
-            self.showLoading()
-            let credential = FacebookAuthProvider.credential(withAccessToken: token)
-            FirebaseAuth.Auth.auth().signIn(with: credential) { (result, error) in
-                self.hideLoading()
-                guard result != nil, error == nil else {
-                    self.showAlert(title: "\(Text.error)!", msg: error?.localizedDescription)
-                    return
-                }
-                
-                self.showConversation(user: user)
-            }
+            self.handlerLogin(user: user, error: error)
         }
     }
     
@@ -322,34 +269,10 @@ extension LoginViewController: GIDSignInDelegate {
             print(error.localizedDescription)
             return
         }
-        
-        guard let email = user.profile.email,
-              let firstName = user.profile.givenName,
-              let lastName = user.profile.familyName else {
-            return
-        }
-        
-        var userInfo = User(email: email, firstName: firstName, lastName: lastName)
-        DatabaseManager.shared.insertUserIfNeeded(user: userInfo)
-        if user.profile.hasImage {
-            guard let url = user.profile.imageURL(withDimension: 300) else { return }
-            userInfo.profileURLString = url.absoluteString
-            self.uploadProfilePicture(ofUser: userInfo)
-        }
-        
-        showLoading()
-        guard let authentication = user.authentication else { return }
-        let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                       accessToken: authentication.accessToken)
-        FirebaseAuth.Auth.auth().signIn(with: credential) { [weak self] (result, error) in
-            self?.hideLoading()
+        UserManager.shared.loginGoogle(signIn: signIn, googleUser: user) { [weak self] (user, error) in
             guard let self = self else { return }
-            guard result != nil, error == nil else {
-                self.showAlert(title: "", msg: error?.localizedDescription)
-                return
-            }
-            
-            self.showConversation(user: userInfo)
+            self.hideLoading()
+            self.handlerLogin(user: user, error: error)
         }
     }
     
