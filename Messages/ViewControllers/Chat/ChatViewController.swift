@@ -18,7 +18,12 @@ struct Sender: SenderType {
 
 final class ChatViewController: MessagesViewController {
     
-    private var messages = [Message]()
+    private var messages = [Message]() {
+        didSet {
+            messagesCollectionView.reloadData()
+            messagesCollectionView.scrollToBottom(animated: !oldValue.isEmpty)
+        }
+    }
     
     private let me: User
     private let partner: User
@@ -44,7 +49,7 @@ final class ChatViewController: MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        getAllMessages()
+        listenToMessages()
     }
 }
 
@@ -66,14 +71,10 @@ private extension ChatViewController {
         "\(me.emailDirectory)_\(partner.email)_\(DateFormatter.dateTime().string(from: Date()))"
     }
     
-    func getAllMessages() {
+    func listenToMessages() {
         if let chatId = chatId {
             DatabaseManager.shared.getAllMessages(ofChatId: chatId) { messages in
                 self.messages = messages
-                DispatchQueue.main.async {
-                    self.messagesCollectionView.reloadData()
-                    self.messagesCollectionView.scrollToBottom()
-                }
             }
         }
     }
@@ -121,11 +122,6 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
             guard let self = self else { return }
             if let newChatId = newChatId {
                 self.chatId = newChatId
-            }
-            self.messages.append(message)
-            DispatchQueue.main.async {
-                self.messagesCollectionView.reloadDataAndKeepOffset()
-                self.messagesCollectionView.scrollToBottom(animated: true)
             }
             inputBar.inputTextView.text = ""
         }

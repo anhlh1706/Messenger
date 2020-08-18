@@ -15,7 +15,11 @@ final class ChatListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     private let user: User
-    private var chats = [Chat]()
+    private var chats = [Chat]() {
+        didSet {
+            tableView.reload(oldValue: oldValue, newValue: chats)
+        }
+    }
     
     init(user: User) {
         self.user = user
@@ -29,11 +33,7 @@ final class ChatListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        getChatList()
+        listenForChatList()
     }
 }
 
@@ -69,11 +69,10 @@ private extension ChatListViewController {
         navigationItem.backBarButtonItem?.tintColor = .text
     }
     
-    func getChatList() {
+    func listenForChatList() {
         DatabaseManager.shared.getAllChats(fromEmail: user.email) { [weak self] chats in
             guard let self = self else { return }
             self.chats = chats
-            self.tableView.reloadData()
         }
     }
     

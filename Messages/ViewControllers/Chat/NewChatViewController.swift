@@ -21,19 +21,7 @@ final class NewChatViewController: UIViewController {
     private var users = [User]()
     private var filteredUsers = [User]() {
         didSet {
-            let insertIndexes = filteredUsers.enumerated().filter { repo -> Bool in
-                !oldValue.contains(where: { $0 == repo.element })
-            }
-            let removeIndexes = oldValue.enumerated().filter { repo -> Bool in
-                !filteredUsers.contains(where: { $0 == repo.element })
-            }
-            let indexPathsInsert = insertIndexes.map { IndexPath(row: $0.offset, section: 0) }
-            let indexPathsDelete = removeIndexes.map { IndexPath(row: $0.offset, section: 0) }
-            
-            tableView.beginUpdates()
-            tableView.insertRows(at: indexPathsInsert, with: .top)
-            tableView.deleteRows(at: indexPathsDelete, with: .top)
-            tableView.endUpdates()
+            tableView.reload(oldValue: oldValue, newValue: filteredUsers)
         }
     }
     private let currentEmail: String

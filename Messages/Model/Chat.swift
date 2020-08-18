@@ -31,3 +31,9 @@ struct Chat {
         self.partnerName = partnerName
     }
 }
+
+extension Chat: Equatable {
+    static func ==(lhs: Self, rhs: Self) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

@@ -39,6 +39,22 @@ extension UITableView {
         }
         return header
     }
+    
+    func reload<T: Equatable>(oldValue: [T], newValue: [T]) {
+        let insertIndexes = newValue.enumerated().filter { repo -> Bool in
+            !oldValue.contains(where: { $0 == repo.element })
+        }
+        let removeIndexes = oldValue.enumerated().filter { repo -> Bool in
+            !newValue.contains(where: { $0 == repo.element })
+        }
+        let indexPathsInsert = insertIndexes.map { IndexPath(row: $0.offset, section: 0) }
+        let indexPathsDelete = removeIndexes.map { IndexPath(row: $0.offset, section: 0) }
+        
+        beginUpdates()
+        insertRows(at: indexPathsInsert, with: .top)
+        deleteRows(at: indexPathsDelete, with: .top)
+        endUpdates()
+    }
 }
 
 extension UITableViewCell {
