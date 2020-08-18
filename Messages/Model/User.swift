@@ -15,7 +15,7 @@ struct User: Decodable {
     var profileURLString: String?
     
     var emailDirectory: String {
-        email.replacingOccurrences(of: ".", with: "-").replacingOccurrences(of: "@", with: "-")
+        email.lowercased().replacingOccurrences(of: ".", with: "_").replacingOccurrences(of: "@", with: "-")
     }
     
     var profilePictureFileName: String {

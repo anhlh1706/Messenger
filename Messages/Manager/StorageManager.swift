@@ -42,10 +42,6 @@ final class StorageManager {
         }
     }
     
-    func profileFileName(forEmail email: String) -> String {
-        email.replacingOccurrences(of: ".", with: "-").replacingOccurrences(of: "@", with: "-")
-    }
-    
     private func fullPath(forFileName fileName: String) -> String {
         "images/\(fileName)"
     }

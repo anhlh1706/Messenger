@@ -16,6 +16,7 @@ enum Text {
     static let next = "Next".localized
     static let error = "Error".localized
     static let finish = "Finish".localized
+    static let search = "Search".localized
     static let successfully = "Successfully".localized
     
     static let noInternetMsg = "Internet may not be available".localized

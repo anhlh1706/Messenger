@@ -15,18 +15,17 @@ protocol NewChatDelegate: AnyObject {
 
 final class NewChatViewController: UIViewController {
     
-    let tableView = UITableView(frame: .zero, style: .plain)
-    let searchBar = UISearchBar()
+    private let tableView = UITableView(frame: .zero, style: .plain)
+    private let searchBar = UISearchBar()
     
-    weak var delegate: NewChatDelegate?
-    
-    var users = [User]() {
+    private var users = [User]()
+    private var filteredUsers = [User]() {
         didSet {
-            let insertIndexes = users.enumerated().filter { repo -> Bool in
+            let insertIndexes = filteredUsers.enumerated().filter { repo -> Bool in
                 !oldValue.contains(where: { $0 == repo.element })
             }
             let removeIndexes = oldValue.enumerated().filter { repo -> Bool in
-                !users.contains(where: { $0 == repo.element })
+                !filteredUsers.contains(where: { $0 == repo.element })
             }
             let indexPathsInsert = insertIndexes.map { IndexPath(row: $0.offset, section: 0) }
             let indexPathsDelete = removeIndexes.map { IndexPath(row: $0.offset, section: 0) }
@@ -37,6 +36,8 @@ final class NewChatViewController: UIViewController {
             tableView.endUpdates()
         }
     }
+    
+    weak var delegate: NewChatDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,20 +51,33 @@ final class NewChatViewController: UIViewController {
         tableView.separatorStyle = .none
         
         searchBar.delegate = self
-        searchBar.placeholder = "Search"
+        searchBar.placeholder = Text.search
         searchBar.tintColor = .text
         
-        let rightBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(dismissSelf))
+        let rightBarButton = UIBarButtonItem(title: Text.cancel, style: .plain, target: self, action: #selector(dismissSelf))
         rightBarButton.tintColor = .text
         navigationItem.rightBarButtonItem = rightBarButton
         navigationController?.navigationBar.topItem?.titleView = searchBar
         searchBar.becomeFirstResponder()
         search(email: "")
     }
+}
+
+// MARK: - Private functions
+private extension NewChatViewController {
     
     func search(email: String) {
-        DatabaseManager.shared.getUsers(filterEmail: email) { users in
-            self.users = users
+        if users.isEmpty {
+            DatabaseManager.shared.getAllUsers { users in
+                self.users = users
+                self.filteredUsers = users
+            }
+        } else {
+            if email.isEmpty {
+                filteredUsers = users
+            } else {
+                filteredUsers = users.filter { $0.email.lowercased().contains(email.lowercased()) }
+            }
         }
     }
     
@@ -84,11 +98,11 @@ extension NewChatViewController: UISearchBarDelegate {
 // MARK: - UITableViewDataSource
 extension NewChatViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        users.count
+        filteredUsers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let user = users[indexPath.row]
+        let user = filteredUsers[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.render(title: user.email, subTitle: user.firstName, iconUrl: user.profileURLString)
@@ -103,7 +117,7 @@ extension NewChatViewController: UITableViewDataSource {
 extension NewChatViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.didSelectPatner(partner: users[indexPath.row])
         dismiss(animated: true)
+        delegate?.didSelectPatner(partner: filteredUsers[indexPath.row])
     }
 }

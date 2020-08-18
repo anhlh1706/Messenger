@@ -12,19 +12,10 @@ import SDWebImage
 
 final class ChatListViewController: UIViewController {
     
-    override var hidesBottomBarWhenPushed: Bool {
-        get {
-            return navigationController?.topViewController != self
-        }
-        set {
-            super.hidesBottomBarWhenPushed = newValue
-        }
-    }
-    
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    let user: User
-    var partners = [User]()
+    private let user: User
+    private var chats = [Chat]()
     
     init(user: User) {
         self.user = user
@@ -42,7 +33,7 @@ final class ChatListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(false, animated: true)
+        getChatList()
     }
 }
 
@@ -50,7 +41,6 @@ final class ChatListViewController: UIViewController {
 private extension ChatListViewController {
     
     func setupView() {
-        
         view.addSubview(tableView)
         tableView.edgeAnchors == view.edgeAnchors
         
@@ -77,10 +67,28 @@ private extension ChatListViewController {
         navigationItem.leftBarButtonItem = leftBarButton
     }
     
-    func showChat(partner: User) {
-        let chatVC = ChatViewController(me: user, partner: partner)
-        navigationController?.pushViewController(chatVC, animated: true)
+    func getChatList() {
+        DatabaseManager.shared.getAllChats(fromEmail: user.email) { [weak self] chats in
+            guard let self = self else { return }
+            self.chats = chats
+            self.tableView.reloadData()
+        }
     }
+    
+    func showChat(chat: Chat) {
+        showLoading()
+        DatabaseManager.shared.getUser(forEmail: chat.partner) { [unowned self] partner in
+            self.hideLoading()
+            if let partner = partner {
+                let chatVC = ChatViewController(chatId: chat.id, me: self.user, partner: partner)
+                self.navigationController?.pushViewController(chatVC, animated: true)
+            }
+        }
+    }
+}
+
+//MARK: - Actions
+private extension ChatListViewController {
     
     @objc
     func didTapCompose() {
@@ -93,17 +101,18 @@ private extension ChatListViewController {
 // MARK: - UITableViewDataSource
 extension ChatListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let patner = partners[indexPath.row]
+        let chat = chats[indexPath.row]
         
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.selectionStyle = .none
-        cell.render(title: patner.email, subTitle: patner.firstName, iconUrl: patner.profileURLString)
-        
+        cell.render(title: chat.partner, subTitle: chat.lastMessage, iconUrl: chat.partnerImage)
+        cell.iconCornerRadius = 20
+        cell.style = .boldTitle
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return partners.count
+        return chats.count
     }
 }
 
@@ -111,14 +120,15 @@ extension ChatListViewController: UITableViewDataSource {
 extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showChat(partner: partners[indexPath.row])
+        showChat(chat: chats[indexPath.row])
     }
 }
 
 // MARK: - NewChatDelegate
 extension ChatListViewController: NewChatDelegate {
     func didSelectPatner(partner: User) {
-        showChat(partner: partner)
+        let chatVC = ChatViewController(chatId: nil, me: user, partner: partner)
+        navigationController?.pushViewController(chatVC, animated: true)
     }
     
 }

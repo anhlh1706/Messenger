@@ -25,8 +25,6 @@
 		E617511124E383DB00DEDDE4 /* SPAnimationSpring.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750E424E383DA00DEDDE4 /* SPAnimationSpring.swift */; };
 		E617511224E383DB00DEDDE4 /* SPAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750E524E383DA00DEDDE4 /* SPAnimation.swift */; };
 		E617511324E383DB00DEDDE4 /* SPSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750E624E383DA00DEDDE4 /* SPSegmentedControl.swift */; };
-		E617511424E383DB00DEDDE4 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E61750E824E383DA00DEDDE4 /* Debug.xcconfig */; };
-		E617511524E383DB00DEDDE4 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E61750E924E383DA00DEDDE4 /* Release.xcconfig */; };
 		E617511624E383DB00DEDDE4 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EA24E383DA00DEDDE4 /* Config.swift */; };
 		E617511724E383DB00DEDDE4 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EB24E383DA00DEDDE4 /* AppHelper.swift */; };
 		E617511824E383DB00DEDDE4 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750ED24E383DA00DEDDE4 /* Date.swift */; };
@@ -67,6 +65,8 @@
 		E660B05324E4502E007CDCA6 /* SingleTextFieldCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660B05224E4502E007CDCA6 /* SingleTextFieldCollectionCell.swift */; };
 		E660B05524E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660B05424E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift */; };
 		E679A8DD24E6212300DEAD72 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679A8DC24E6212300DEAD72 /* SplashViewController.swift */; };
+		E68D11EB24EB791D00BFBF6D /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D11EA24EB791D00BFBF6D /* Chat.swift */; };
+		E68D11ED24EB8EB500BFBF6D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D11EC24EB8EB500BFBF6D /* Message.swift */; };
 		E6BCFE2624E79E5F00599C35 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BCFE2524E79E5F00599C35 /* ChatViewController.swift */; };
 		E6BCFE2824E7A19000599C35 /* NewChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BCFE2724E7A19000599C35 /* NewChatViewController.swift */; };
 		E6BCFE2A24E7A55C00599C35 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6BCFE2924E7A55C00599C35 /* StorageManager.swift */; };
@@ -143,6 +143,8 @@
 		E660B05224E4502E007CDCA6 /* SingleTextFieldCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTextFieldCollectionCell.swift; sourceTree = "<group>"; };
 		E660B05424E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextFieldCollectionCell.swift; sourceTree = "<group>"; };
 		E679A8DC24E6212300DEAD72 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		E68D11EA24EB791D00BFBF6D /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
+		E68D11EC24EB8EB500BFBF6D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E6BCFE2524E79E5F00599C35 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		E6BCFE2724E7A19000599C35 /* NewChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChatViewController.swift; sourceTree = "<group>"; };
 		E6BCFE2924E7A55C00599C35 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
@@ -349,6 +351,8 @@
 				E617513924E383EE00DEDDE4 /* Base */,
 				E617513724E383EE00DEDDE4 /* ResponseObject.swift */,
 				E617513824E383EE00DEDDE4 /* User.swift */,
+				E68D11EA24EB791D00BFBF6D /* Chat.swift */,
+				E68D11EC24EB8EB500BFBF6D /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -451,7 +455,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1160;
-				LastUpgradeCheck = 1160;
+				LastUpgradeCheck = 1200;
 				ORGANIZATIONNAME = "Hoàng Anh";
 				TargetAttributes = {
 					E61750B624E3837100DEDDE4 = {
@@ -482,11 +486,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E617511424E383DB00DEDDE4 /* Debug.xcconfig in Resources */,
 				E617514124E383EE00DEDDE4 /* LaunchScreen.storyboard in Resources */,
 				E617513F24E383EE00DEDDE4 /* Colors.xcassets in Resources */,
 				E617514024E383EE00DEDDE4 /* Assets.xcassets in Resources */,
-				E617511524E383DB00DEDDE4 /* Release.xcconfig in Resources */,
 				E6D65B8C24E631D8001182DC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -602,6 +604,7 @@
 				E660B05524E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift in Sources */,
 				E617510524E383DB00DEDDE4 /* Text.swift in Sources */,
 				E6CAE2B624E6791F00AB8B2E /* ProfileViewController.swift in Sources */,
+				E68D11ED24EB8EB500BFBF6D /* Message.swift in Sources */,
 				E617512C24E383DB00DEDDE4 /* UIAlertController.swift in Sources */,
 				E617512624E383DB00DEDDE4 /* String.swift in Sources */,
 				E6D65B9224E64020001182DC /* NavigationController.swift in Sources */,
@@ -615,6 +618,7 @@
 				E617514C24E3855100DEDDE4 /* APIRouter.swift in Sources */,
 				E617510724E383DB00DEDDE4 /* Label.swift in Sources */,
 				E617512A24E383DB00DEDDE4 /* Double.swift in Sources */,
+				E68D11EB24EB791D00BFBF6D /* Chat.swift in Sources */,
 				E617512224E383DB00DEDDE4 /* UITableView.swift in Sources */,
 				E617510C24E383DB00DEDDE4 /* Button.swift in Sources */,
 				E61750BB24E3837100DEDDE4 /* AppDelegate.swift in Sources */,
@@ -662,6 +666,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -722,6 +727,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
