@@ -10,21 +10,24 @@ struct Chat {
     let id: String
     let lastMessage: String
     let lastUpdated: String
-    let partner: String
+    let partnerEmail: String
     let partnerImage: String
+    let partnerName: String
     
     init?(directory: [String: String]) {
         guard let id = directory["chatId"],
             let lastMessage = directory["lastMessage"],
             let lastUpdated = directory["lastUpdated"],
-            let partner = directory["partner"],
-            let partnerImage = directory["partnerImage"] else {
+            let partnerEmail = directory["partnerEmail"],
+            let partnerImage = directory["partnerImage"],
+            let partnerName = directory["partnerName"] else {
                 return nil
         }
         self.id = id
         self.lastUpdated = lastUpdated
         self.lastMessage = lastMessage
-        self.partner = partner
+        self.partnerEmail = partnerEmail
         self.partnerImage = partnerImage
+        self.partnerName = partnerName
     }
 }

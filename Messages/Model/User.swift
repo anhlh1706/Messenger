@@ -14,6 +14,10 @@ struct User: Decodable {
     let lastName: String
     var profileURLString: String?
     
+    var fullName: String {
+        firstName + " " + lastName
+    }
+    
     var emailDirectory: String {
         email.lowercased().replacingOccurrences(of: ".", with: "_").replacingOccurrences(of: "@", with: "-")
     }

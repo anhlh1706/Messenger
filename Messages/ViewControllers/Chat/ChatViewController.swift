@@ -60,6 +60,10 @@ private extension ChatViewController {
         messageInputBar.delegate = self
         messageInputBar.inputTextView.becomeFirstResponder()
         scrollsToBottomOnKeyboardBeginsEditing = true
+        
+        let backButton = UIBarButtonItem()
+        backButton.tintColor = .text
+        navigationItem.backBarButtonItem = backButton
     }
     
     func createMessageId() -> String {

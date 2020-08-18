@@ -51,14 +51,25 @@ final class NewChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .background
+        setupView()
+        search(email: "")
+    }
+}
+
+// MARK: - Private functions
+private extension NewChatViewController {
+    
+    func setupView() {
         view.addSubview(tableView)
         tableView.edgeAnchors == view.edgeAnchors
-        tableView.tableFooterView = UIView()
+        
+        view.backgroundColor = .background
+        
         tableView.register(cell: IconTextTableCell.self)
-        tableView.dataSource = self
         tableView.delegate = self
+        tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.tableFooterView = UIView()
         
         searchBar.delegate = self
         searchBar.placeholder = Text.search
@@ -69,12 +80,7 @@ final class NewChatViewController: UIViewController {
         navigationItem.rightBarButtonItem = rightBarButton
         navigationController?.navigationBar.topItem?.titleView = searchBar
         searchBar.becomeFirstResponder()
-        search(email: "")
     }
-}
-
-// MARK: - Private functions
-private extension NewChatViewController {
     
     func search(email: String) {
         if users.isEmpty {

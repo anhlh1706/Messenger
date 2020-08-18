@@ -50,6 +50,7 @@ private extension ChatListViewController {
         tableView.tableFooterView = UIView()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
         
         let rightBarButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(didTapCompose))
         rightBarButton.style = .done
@@ -65,6 +66,7 @@ private extension ChatListViewController {
         }
         let leftBarButton = UIBarButtonItem(customView: profileImageView)
         navigationItem.leftBarButtonItem = leftBarButton
+        navigationItem.backBarButtonItem?.tintColor = .text
     }
     
     func getChatList() {
@@ -77,7 +79,7 @@ private extension ChatListViewController {
     
     func showChat(chat: Chat) {
         showLoading()
-        DatabaseManager.shared.getUser(forEmail: chat.partner) { [unowned self] partner in
+        DatabaseManager.shared.getUser(forEmail: chat.partnerEmail) { [unowned self] partner in
             self.hideLoading()
             if let partner = partner {
                 let chatVC = ChatViewController(chatId: chat.id, me: self.user, partner: partner)
@@ -105,8 +107,9 @@ extension ChatListViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(cell: IconTextTableCell.self, indexPath: indexPath)
         cell.selectionStyle = .none
-        cell.render(title: chat.partner, subTitle: chat.lastMessage, iconUrl: chat.partnerImage)
-        cell.iconCornerRadius = 20
+        cell.render(title: chat.partnerName, subTitle: chat.lastMessage, iconUrl: chat.partnerImage)
+        cell.iconCornerRadius = 25
+        cell.iconSize = CGSize(width: 50, height: 50)
         cell.style = .boldTitle
         return cell
     }

@@ -157,12 +157,14 @@ extension DatabaseManager {
                 "lastUpdated": dateString,
             ]
             var newMeChat = newChat
-            newMeChat["partner"] = receiverEmail
+            newMeChat["partnerEmail"] = receiverEmail
             newMeChat["partnerImage"] = toUser.profileURLString ?? ""
+            newMeChat["partnerName"] = toUser.fullName
             
             var newPartnerChat  = newChat
-            newPartnerChat["partner"] = senderEmail
+            newPartnerChat["partnerEmail"] = senderEmail
             newPartnerChat["partnerImage"] = fromUser.profileURLString ?? ""
+            newPartnerChat["partnerName"] = fromUser.fullName
             
             addChat(toEmail: senderEmail, chatValue: newMeChat)
             addChat(toEmail: receiverEmail, chatValue: newPartnerChat)
