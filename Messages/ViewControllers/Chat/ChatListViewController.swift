@@ -15,11 +15,7 @@ final class ChatListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     private let user: User
-    private var chats = [Chat]() {
-        didSet {
-            tableView.reload(oldValue: oldValue, newValue: chats)
-        }
-    }
+    private var chats = [Chat]()
     
     init(user: User) {
         self.user = user
@@ -72,7 +68,13 @@ private extension ChatListViewController {
     func listenForChatList() {
         DatabaseManager.shared.getAllChats(fromEmail: user.email) { [weak self] chats in
             guard let self = self else { return }
+            let oldValue = self.chats
             self.chats = chats
+            if oldValue == self.chats {
+                self.tableView.reloadData()
+            } else {
+                self.tableView.reload(oldValue: oldValue, newValue: chats)
+            }
         }
     }
     

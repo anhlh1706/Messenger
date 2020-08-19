@@ -147,7 +147,14 @@ extension DatabaseManager {
         ]
         
         if let chatId = chatId {
+            let newChatData = [
+                "lastMessage": content,
+                "lastUpdated": dateString
+            ]
             addMessage(toChatId: chatId, messageData: messageData)
+            updateChats(ofUserEmail: senderEmail, chatId: chatId, data: newChatData)
+            updateChats(ofUserEmail: receiverEmail, chatId: chatId, data: newChatData)
+            
             completion(nil)
         } else {
             let newChatId = directory(forEmail: senderEmail) + "-" + directory(forEmail: receiverEmail)
@@ -184,6 +191,9 @@ extension DatabaseManager {
                 completion([])
             }
         }
+    }
+    
+    func listenToNewMessage(ofEmail email: String, completion: @escaping ([Chat]) -> Void) {
         chatsDirectory.child(directory(forEmail: email)).observe(.childChanged) { snapshot in
             if let value = snapshot.value as? [[String: String]] {
                 completion(value.compactMap { Chat(directory: $0) }.sorted(by: { (left, right) -> Bool in
@@ -205,8 +215,9 @@ extension DatabaseManager {
         }
     }
     
-    func addChat(toEmail email: String, chatValue: [String: String]) {
-        chatsDirectory.child(directory(forEmail: email)).observeSingleEvent(of: .value) { snapshot in
+    private func addChat(toEmail email: String, chatValue: [String: String]) {
+        chatsDirectory.child(directory(forEmail: email)).observeSingleEvent(of: .value) { [weak self] snapshot in
+            guard let self = self else { return }
             if var value = snapshot.value as? [[String: String]] {
                 value.append(chatValue)
                 self.chatsDirectory.child(self.directory(forEmail: email)).setValue(value)
@@ -216,13 +227,25 @@ extension DatabaseManager {
         }
     }
     
-    func addMessage(toChatId chatId: String, messageData: [String: String]) {
-        messagesDirectory.child(chatId).observeSingleEvent(of: .value) { snapshot in
+    private func addMessage(toChatId chatId: String, messageData: [String: String]) {
+        messagesDirectory.child(chatId).observeSingleEvent(of: .value) { [weak self] snapshot in
+            guard let self = self else { return }
             if var value = snapshot.value as? [[String: String]] {
                 value.append(messageData)
                 self.messagesDirectory.child(chatId).setValue(value)
             } else {
                 self.messagesDirectory.child(chatId).setValue([messageData])
+            }
+        }
+    }
+    
+    private func updateChats(ofUserEmail email: String, chatId: String, data: [String: String]) {
+        chatsDirectory.child(directory(forEmail: email)).observeSingleEvent(of: .value) { [weak self] snapshot in
+            guard let self = self else { return }
+            if var value = snapshot.value as? [[String: String]], let index = value.firstIndex(where: { $0["chatId"] == chatId }) {
+                value[index]["lastMessage"] = data["lastMessage"]
+                value[index]["lastUpdated"] = data["lastUpdated"]
+                self.chatsDirectory.child(self.directory(forEmail: email)).setValue(value)
             }
         }
     }

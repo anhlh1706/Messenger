@@ -57,7 +57,7 @@ final class ChatViewController: MessagesViewController {
 private extension ChatViewController {
     
     func setupView() {
-        title = partner.firstName + " " + partner.lastName
+        title = partner.fullName
         view.backgroundColor = .background
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -84,6 +84,7 @@ extension ChatViewController: MessagesLayoutDelegate {
     
 }
 
+// MARK: - MessagesDataSource
 extension ChatViewController: MessagesDataSource {
     func currentSender() -> SenderType {
         meSender
