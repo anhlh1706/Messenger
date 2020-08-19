@@ -47,7 +47,7 @@ extension DateFormatter {
     
     static func fullStyle() -> DateFormatter {
         let dateformatter = DateFormatter()
-        dateformatter.dateFormat = "YYYY-MM-DD hh:mm:ss.sTZD"
+        dateformatter.dateFormat = "YYYY-MM-dd hh:mm:ss.s"
         
         return dateformatter
     }

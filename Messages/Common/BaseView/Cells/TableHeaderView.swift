@@ -71,6 +71,9 @@ class BasicTableHeaderView: UITableViewHeaderFooterView {
         case .largeTitle:
             titleLabel.font = .systemFont(ofSize: 17)
             subtitleLabel.font = .systemFont(ofSize: 12)
+        case .mediumTitle:
+            titleLabel.font = .systemFont(ofSize: 17, weight: .medium)
+            subtitleLabel.font = .systemFont(ofSize: 12)
         case .boldTitle:
             titleLabel.font = .boldSystemFont(ofSize: 17)
             subtitleLabel.font = .systemFont(ofSize: 12)

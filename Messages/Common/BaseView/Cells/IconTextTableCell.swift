@@ -72,6 +72,9 @@ final class IconTextTableCell: UITableViewCell {
         case .largeTitle:
             titleLabel.font = .systemFont(ofSize: 17)
             subtitleLabel.font = .systemFont(ofSize: 14)
+        case .mediumTitle:
+            titleLabel.font = .systemFont(ofSize: 17, weight: .medium)
+            subtitleLabel.font = .systemFont(ofSize: 14)
         case .boldTitle:
             titleLabel.font = .boldSystemFont(ofSize: 17)
             subtitleLabel.font = .systemFont(ofSize: 14)

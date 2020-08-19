@@ -36,5 +36,5 @@ enum ErrorCode: Int {
 }
 
 enum TextStyle {
-    case normal, largeTitle, boldTitle
+    case normal, largeTitle, mediumTitle, boldTitle
 }

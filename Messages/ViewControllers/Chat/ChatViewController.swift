@@ -122,6 +122,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
             guard let self = self else { return }
             if let newChatId = newChatId {
                 self.chatId = newChatId
+                self.listenToMessages()
             }
             inputBar.inputTextView.text = ""
         }

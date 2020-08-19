@@ -36,15 +36,15 @@ final class RegisterViewController: UIViewController {
     private var comfirmPassword = ""
     private var profileImage: UIImage = .userPlaceholder
     
-    var isEmailValidate: Bool {
+    private var isEmailValidate: Bool {
         email.isValidEmail()
     }
     
-    var isNameValidate: Bool {
+    private var isNameValidate: Bool {
         [firstName, lastName].allSatisfy({ !$0.isEmpty })
     }
     
-    var isPasswordValidate: Bool {
+    private var isPasswordValidate: Bool {
         (password == comfirmPassword) && password.count > 5
     }
     
@@ -286,7 +286,7 @@ private extension RegisterViewController {
             if available {
                 self.currentStepIndex += 1
             } else {
-                self.showAlert(msg: "\(Text.alreadyExistsEmailMsg)") {
+                self.showAlert(msg: Text.alreadyExistsEmailMsg) {
                     let emailField = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 0))?.viewWithTag(11)
                     emailField?.becomeFirstResponder()
                 }

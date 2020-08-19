@@ -108,12 +108,19 @@ extension ChatListViewController: UITableViewDataSource {
         cell.selectionStyle = .none
         
         let dateCurrentFormat = DateFormatter.fullStyle().date(from: chat.lastUpdated) ?? Date()
-        let lastUpdate = DateFormatter.textStyle().string(from: dateCurrentFormat)
+        let formatter: DateFormatter
+        if dateCurrentFormat.yesterday == Date().yesterday {
+            formatter = DateFormatter.timeOnly()
+        } else {
+            formatter = DateFormatter.textStyle()
+        }
+        
+        let lastUpdate = formatter.string(from: dateCurrentFormat)
         let sideInfo = chat.lastMessage + "  .  " + lastUpdate
         cell.render(title: chat.partnerName, subTitle: sideInfo, iconUrl: chat.partnerImage)
         cell.iconCornerRadius = 25
         cell.iconSize = CGSize(width: 50, height: 50)
-        cell.style = .boldTitle
+        cell.style = .mediumTitle
         return cell
     }
     
@@ -133,8 +140,12 @@ extension ChatListViewController: UITableViewDelegate {
 // MARK: - NewChatDelegate
 extension ChatListViewController: NewChatDelegate {
     func didSelectPatner(partner: User) {
-        let chatVC = ChatViewController(chatId: nil, me: user, partner: partner)
-        navigationController?.pushViewController(chatVC, animated: true)
+        if let index = chats.firstIndex(where: { $0.partnerEmail == partner.email }) {
+            showChat(chat: chats[index])
+        } else {
+            let chatVC = ChatViewController(chatId: nil, me: user, partner: partner)
+            navigationController?.pushViewController(chatVC, animated: true)
+        }
     }
     
 }
