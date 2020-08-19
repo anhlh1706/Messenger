@@ -7,12 +7,9 @@ target 'Messages' do
 
   # Pods for Messages
 pod 'Anchorage'
-pod 'Alamofire'
-pod 'SwiftyJSON'
 pod 'SDWebImage'
 pod 'KeychainAccess'
 pod 'MessageKit'
-pod 'JGProgressHUD'
 pod 'SDWebImage'
 
 # Firebase

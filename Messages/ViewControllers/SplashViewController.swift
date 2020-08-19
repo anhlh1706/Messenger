@@ -30,7 +30,7 @@ final class SplashViewController: UIViewController {
     }
     
     func setupUserData() {
-        if UserManager.shared.isLogedIn, let currentEmail = UserManager.shared.currentEmail {
+        if UserManager.shared.isLogedIn, let currentEmail = UserManager.shared.userEmail {
             DatabaseManager.shared.getUser(forEmail: currentEmail) { user in
                 if let user = user {
                     UserManager.shared.user = user

@@ -51,13 +51,7 @@
 		E617513F24E383EE00DEDDE4 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E617513124E383ED00DEDDE4 /* Colors.xcassets */; };
 		E617514024E383EE00DEDDE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E617513224E383ED00DEDDE4 /* Assets.xcassets */; };
 		E617514124E383EE00DEDDE4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E617513324E383ED00DEDDE4 /* LaunchScreen.storyboard */; };
-		E617514324E383EE00DEDDE4 /* ResponseObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617513724E383EE00DEDDE4 /* ResponseObject.swift */; };
 		E617514424E383EE00DEDDE4 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617513824E383EE00DEDDE4 /* User.swift */; };
-		E617514524E383EE00DEDDE4 /* BaseResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617513A24E383EE00DEDDE4 /* BaseResponse.swift */; };
-		E617514624E383EE00DEDDE4 /* BaseListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617513B24E383EE00DEDDE4 /* BaseListResponse.swift */; };
-		E617514724E383EE00DEDDE4 /* BasePagingResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617513C24E383EE00DEDDE4 /* BasePagingResponse.swift */; };
-		E617514B24E3855100DEDDE4 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617514924E3855100DEDDE4 /* APIClient.swift */; };
-		E617514C24E3855100DEDDE4 /* APIRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617514A24E3855100DEDDE4 /* APIRouter.swift */; };
 		E617514E24E38B3300DEDDE4 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617514D24E38B3300DEDDE4 /* LoginViewController.swift */; };
 		E617515024E3943100DEDDE4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = E617514F24E3943100DEDDE4 /* TextField.swift */; };
 		E642BCBE24E543DD0036B079 /* AvatarSelectCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E642BCBD24E543DD0036B079 /* AvatarSelectCollectionCell.swift */; };
@@ -130,13 +124,7 @@
 		E617513124E383ED00DEDDE4 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		E617513224E383ED00DEDDE4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E617513424E383ED00DEDDE4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		E617513724E383EE00DEDDE4 /* ResponseObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseObject.swift; sourceTree = "<group>"; };
 		E617513824E383EE00DEDDE4 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		E617513A24E383EE00DEDDE4 /* BaseResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseResponse.swift; sourceTree = "<group>"; };
-		E617513B24E383EE00DEDDE4 /* BaseListResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseListResponse.swift; sourceTree = "<group>"; };
-		E617513C24E383EE00DEDDE4 /* BasePagingResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePagingResponse.swift; sourceTree = "<group>"; };
-		E617514924E3855100DEDDE4 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		E617514A24E3855100DEDDE4 /* APIRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRouter.swift; sourceTree = "<group>"; };
 		E617514D24E38B3300DEDDE4 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E617514F24E3943100DEDDE4 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		E642BCBD24E543DD0036B079 /* AvatarSelectCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarSelectCollectionCell.swift; sourceTree = "<group>"; };
@@ -200,7 +188,6 @@
 			isa = PBXGroup;
 			children = (
 				E617513524E383EE00DEDDE4 /* Model */,
-				E617514824E3855100DEDDE4 /* APIClient */,
 				E61750CF24E383D900DEDDE4 /* Manager */,
 				E61750CE24E383CB00DEDDE4 /* Common */,
 				E617513024E383ED00DEDDE4 /* Resources */,
@@ -351,32 +338,11 @@
 		E617513524E383EE00DEDDE4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				E617513924E383EE00DEDDE4 /* Base */,
-				E617513724E383EE00DEDDE4 /* ResponseObject.swift */,
 				E617513824E383EE00DEDDE4 /* User.swift */,
 				E68D11EA24EB791D00BFBF6D /* Chat.swift */,
 				E68D11EC24EB8EB500BFBF6D /* Message.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		E617513924E383EE00DEDDE4 /* Base */ = {
-			isa = PBXGroup;
-			children = (
-				E617513A24E383EE00DEDDE4 /* BaseResponse.swift */,
-				E617513B24E383EE00DEDDE4 /* BaseListResponse.swift */,
-				E617513C24E383EE00DEDDE4 /* BasePagingResponse.swift */,
-			);
-			path = Base;
-			sourceTree = "<group>";
-		};
-		E617514824E3855100DEDDE4 /* APIClient */ = {
-			isa = PBXGroup;
-			children = (
-				E617514924E3855100DEDDE4 /* APIClient.swift */,
-				E617514A24E3855100DEDDE4 /* APIRouter.swift */,
-			);
-			path = APIClient;
 			sourceTree = "<group>";
 		};
 		E64999BE24E44D5F00E77A05 /* Login */ = {
@@ -567,8 +533,6 @@
 				E617511824E383DB00DEDDE4 /* Date.swift in Sources */,
 				E693703624EBE128004B6F64 /* UserManager.swift in Sources */,
 				E6BCFE2A24E7A55C00599C35 /* StorageManager.swift in Sources */,
-				E617514B24E3855100DEDDE4 /* APIClient.swift in Sources */,
-				E617514524E383EE00DEDDE4 /* BaseResponse.swift in Sources */,
 				E617511F24E383DB00DEDDE4 /* Selector.swift in Sources */,
 				E617514424E383EE00DEDDE4 /* User.swift in Sources */,
 				E617510B24E383DB00DEDDE4 /* MonthYearPickerView.swift in Sources */,
@@ -582,9 +546,7 @@
 				E617512424E383DB00DEDDE4 /* Dictionary.swift in Sources */,
 				E617510D24E383DB00DEDDE4 /* LoadingView.swift in Sources */,
 				E617515024E3943100DEDDE4 /* TextField.swift in Sources */,
-				E617514724E383EE00DEDDE4 /* BasePagingResponse.swift in Sources */,
 				E617511C24E383DB00DEDDE4 /* Array.swift in Sources */,
-				E617514324E383EE00DEDDE4 /* ResponseObject.swift in Sources */,
 				E6CAE2B424E678C600AB8B2E /* ChatTabbarController.swift in Sources */,
 				E617511024E383DB00DEDDE4 /* SPAnimationUpward.swift in Sources */,
 				E617510824E383DB00DEDDE4 /* IconTextTableCell.swift in Sources */,
@@ -616,10 +578,8 @@
 				E617512024E383DB00DEDDE4 /* UICollectionView.swift in Sources */,
 				E617511624E383DB00DEDDE4 /* Config.swift in Sources */,
 				E617511D24E383DB00DEDDE4 /* UIStackView.swift in Sources */,
-				E617514624E383EE00DEDDE4 /* BaseListResponse.swift in Sources */,
 				E679A8DD24E6212300DEAD72 /* SplashViewController.swift in Sources */,
 				E617512724E383DB00DEDDE4 /* UserDefaults.swift in Sources */,
-				E617514C24E3855100DEDDE4 /* APIRouter.swift in Sources */,
 				E617510724E383DB00DEDDE4 /* Label.swift in Sources */,
 				E617512A24E383DB00DEDDE4 /* Double.swift in Sources */,
 				E68D11EB24EB791D00BFBF6D /* Chat.swift in Sources */,

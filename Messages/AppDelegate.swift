@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         start()
         return true
     }
+    
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         ApplicationDelegate.shared.application(app, open: url, sourceApplication: options[.sourceApplication] as? String, annotation: options[.annotation])
         

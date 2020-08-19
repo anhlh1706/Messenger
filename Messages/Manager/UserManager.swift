@@ -14,7 +14,7 @@ import FBSDKLoginKit
 final class UserManager {
     
     var user: User?
-    var currentEmail: String? {
+    var userEmail: String? {
         FirebaseAuth.Auth.auth().currentUser?.email
     }
     
