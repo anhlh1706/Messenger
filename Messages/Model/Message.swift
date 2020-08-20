@@ -8,6 +8,7 @@
 
 import Foundation
 import MessageKit
+import CoreLocation
 
 struct Message: MessageType {
     let sender: SenderType
@@ -26,7 +27,7 @@ struct Message: MessageType {
         guard let messageId = directory["messageId"],
             let senderEmail = directory["senderEmail"],
             let content = directory["content"],
-            // let type = directory["type"],
+            let type = directory["type"],
             let name = directory["name"],
             let sentDateStr = directory["sentDate"],
             let photoUrl = directory["photoUrl"] else {
@@ -38,7 +39,44 @@ struct Message: MessageType {
         self.sender = sender
         self.messageId = messageId
         self.sentDate = sentDate
-        self.kind = .text(content)
+        
+        if type == "photo" {
+            guard let imageUrl = URL(string: content) else {
+                return nil
+            }
+            
+            let media = Media(url: imageUrl,
+                              image: nil,
+                              placeholderImage: .iconGallery,
+                              size: CGSize(width: 300, height: 300))
+            kind = .photo(media)
+        }
+        else if type == "video" {
+            guard let videoUrl = URL(string: content),
+                let placeHolder = UIImage(systemName: "play.circle.fill") else {
+                    return nil
+            }
+            
+            let media = Media(url: videoUrl,
+                              image: nil,
+                              placeholderImage: placeHolder,
+                              size: CGSize(width: 300, height: 300))
+            kind = .video(media)
+        }
+        else if type == "location" {
+            let locationComponents = content.components(separatedBy: ",")
+            guard let longitude = Double(locationComponents[0]),
+                let latitude = Double(locationComponents[1]) else {
+                return nil
+            }
+            print("Rendering location; long=\(longitude) | lat=\(latitude)")
+            let location = Location(location: CLLocation(latitude: latitude, longitude: longitude),
+                                    size: CGSize(width: 300, height: 300))
+            kind = .location(location)
+        }
+        else {
+            kind = .text(content)
+        }
     }
 }
 
@@ -65,4 +103,16 @@ extension MessageKind {
             return "custom"
         }
     }
+}
+
+struct Media: MediaItem {
+    var url: URL?
+    var image: UIImage?
+    var placeholderImage: UIImage
+    var size: CGSize
+}
+
+struct Location: LocationItem {
+    var location: CLLocation
+    var size: CGSize
 }

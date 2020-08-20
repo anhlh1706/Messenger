@@ -26,6 +26,27 @@ final class StorageManager {
         }
     }
     
+    func uploadMessagePhoto(with data: Data, messageId: String, completion: @escaping (Result<String, Error>) -> Void) {
+        storage.child("message_images/\(messageId)").putData(data, metadata: nil, completion: { [weak self] metadata, error in
+            guard let self = self else { return }
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            self.storage.child(self.photoMessagePath(messageId: messageId)).downloadURL(completion: { url, error in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                guard let url = url else {
+                    return
+                }
+                completion(.success(url.absoluteString))
+            })
+        })
+    }
+    
     /// Get url to download picture for the path in firebase directory
     func downloadURL(forFileName fileName: String, completion: @escaping (Result<URL, Error>) -> Void) {
         let path = fullPath(forFileName: fileName)
@@ -44,5 +65,9 @@ final class StorageManager {
     
     private func fullPath(forFileName fileName: String) -> String {
         "images/\(fileName)"
+    }
+    
+    private func photoMessagePath(messageId: String) -> String {
+        "message_images/\(messageId)"
     }
 }

@@ -17,5 +17,8 @@ extension UIImage {
     static let iconUser         = UIImage(named: "iconUser")!
     static let iconFacebook     = UIImage(named: "iconFacebook")!.withRenderingMode(.alwaysTemplate)
     static let iconGoogle       = UIImage(named: "iconGoogle")!.withRenderingMode(.alwaysTemplate)
+    static let iconLocation     = UIImage(systemName: "location.fill")!
+    static let iconCamera       = UIImage(systemName: "camera.fill")!.withRenderingMode(.alwaysTemplate)
+    static let iconGallery      = UIImage(systemName: "photo.on.rectangle")!
 }
 

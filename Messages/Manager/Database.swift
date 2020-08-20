@@ -131,6 +131,8 @@ extension DatabaseManager {
         switch message.kind {
         case .text(let text):
             content = text
+        case .photo(let media):
+            content = media.url?.absoluteString ?? ""
         default:
             break
         }
@@ -146,29 +148,47 @@ extension DatabaseManager {
             "sentDate": dateString
         ]
         
+        var myLastMessage = ""
+        var partnerLastMessage = ""
+        switch message.kind {
+        case .text:
+            myLastMessage = content
+            partnerLastMessage = content
+        case .photo:
+            myLastMessage = "You sent an image"
+            partnerLastMessage = fromUser.firstName + " sent an image"
+        default:
+            myLastMessage = ""
+        }
         if let chatId = chatId {
-            let newChatData = [
-                "lastMessage": content,
+            let myNewChatData = [
+                "lastMessage": myLastMessage,
+                "lastUpdated": dateString
+            ]
+            let partnerNewChatData = [
+                "lastMessage": partnerLastMessage,
                 "lastUpdated": dateString
             ]
             addMessage(toChatId: chatId, messageData: messageData)
-            updateChats(ofUserEmail: senderEmail, chatId: chatId, data: newChatData)
-            updateChats(ofUserEmail: receiverEmail, chatId: chatId, data: newChatData)
+            updateChats(ofUserEmail: senderEmail, chatId: chatId, data: myNewChatData)
+            updateChats(ofUserEmail: receiverEmail, chatId: chatId, data: partnerNewChatData)
             
             completion(nil)
         } else {
+            
             let newChatId = directory(forEmail: senderEmail) + "-" + directory(forEmail: receiverEmail)
             let newChat = [
                 "chatId": newChatId,
-                "lastMessage": content,
                 "lastUpdated": dateString,
             ]
             var newSelfChat = newChat
+            newSelfChat["lastMessage"] = myLastMessage
             newSelfChat["partnerEmail"] = receiverEmail
             newSelfChat["partnerImage"] = toUser.profileURLString ?? ""
             newSelfChat["partnerName"] = toUser.fullName
             
             var newPartnerChat  = newChat
+            newPartnerChat["lastMessage"] = partnerLastMessage
             newPartnerChat["partnerEmail"] = senderEmail
             newPartnerChat["partnerImage"] = fromUser.profileURLString ?? ""
             newPartnerChat["partnerName"] = fromUser.fullName
