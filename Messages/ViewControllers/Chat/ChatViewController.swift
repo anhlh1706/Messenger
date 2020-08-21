@@ -51,6 +51,7 @@ final class ChatViewController: MessagesViewController {
         setupView()
         listenToMessages()
         setupInputButtons()
+        navigationController?.navigationBar.tintColor = .text
     }
 }
 

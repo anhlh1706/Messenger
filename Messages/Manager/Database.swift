@@ -158,7 +158,7 @@ extension DatabaseManager {
             myLastMessage = "You sent an image"
             partnerLastMessage = fromUser.firstName + " sent an image"
         default:
-            myLastMessage = ""
+            break
         }
         if let chatId = chatId {
             let myNewChatData = [
