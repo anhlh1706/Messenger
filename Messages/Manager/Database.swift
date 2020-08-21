@@ -133,6 +133,8 @@ extension DatabaseManager {
             content = text
         case .photo(let media):
             content = media.url?.absoluteString ?? ""
+        case .video(let media):
+            content = media.url?.absoluteString ?? ""
         default:
             break
         }
@@ -157,6 +159,9 @@ extension DatabaseManager {
         case .photo:
             myLastMessage = "You sent an image"
             partnerLastMessage = fromUser.firstName + " sent an image"
+        case .video:
+            myLastMessage = "You sent a video"
+            partnerLastMessage = fromUser.firstName + " sent a video"
         default:
             break
         }
