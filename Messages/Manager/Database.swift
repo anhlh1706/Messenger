@@ -218,6 +218,21 @@ extension DatabaseManager {
         }
     }
     
+    func deleteChat(fromUser user: User, chatId: String, completion: @escaping (Bool) -> Void) {
+        chatsDirectory.child(user.emailDirectory).observeSingleEvent(of: .value) { [weak self] snapshot in
+            guard let self = self else { return }
+            if var allChats = snapshot.value as? [[String: String]] {
+                if let chatIndex = allChats.firstIndex(where: { $0["chatId"] == chatId }) {
+                    allChats.remove(at: chatIndex)
+                    self.chatsDirectory.child(user.emailDirectory).setValue(allChats)
+                    completion(true)
+                    return
+                }
+            }
+            completion(false)
+        }
+    }
+    
     func listenToNewMessage(ofEmail email: String, completion: @escaping ([Chat]) -> Void) {
         chatsDirectory.child(directory(forEmail: email)).observe(.childChanged) { snapshot in
             if let value = snapshot.value as? [[String: String]] {

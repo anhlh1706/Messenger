@@ -55,6 +55,18 @@ extension UITableView {
         deleteRows(at: indexPathsDelete, with: .top)
         endUpdates()
     }
+    
+    func removeRows(indexPaths: [IndexPath], animation: UITableView.RowAnimation = .top) {
+        beginUpdates()
+        deleteRows(at: indexPaths, with: animation)
+        endUpdates()
+    }
+    
+    func insertRows(indexPaths: [IndexPath], animation: UITableView.RowAnimation = .top) {
+        beginUpdates()
+        insertRows(at: indexPaths, with: animation)
+        endUpdates()
+    }
 }
 
 extension UITableViewCell {

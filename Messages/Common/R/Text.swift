@@ -17,11 +17,14 @@ enum Text {
     static let error = "Error".localized
     static let finish = "Finish".localized
     static let search = "Search".localized
+    static let setting = "Setting".localized
     static let successfully = "Successfully".localized
     
     static let noInternetMsg = "Internet may not be available".localized
     static let connectTimedOutMsg = "Connection timed out".localized
-    static let alreadyExistsEmailMsg = "Email already exists"
+    static let alreadyExistsEmailMsg = "Email already exists".localized
+    static let accessDeniedTitle = "Access denied".localized
+    static let locationAccessDeniedMsg = "Please go to setting and grant location access to use this function".localized
     
     static let login = "Login".localized
     static let loginWithFacebook = "Login with facebook".localized

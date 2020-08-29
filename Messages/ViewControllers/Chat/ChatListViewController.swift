@@ -15,7 +15,15 @@ final class ChatListViewController: UIViewController {
     private let tableView = UITableView(frame: .zero, style: .plain)
     
     private let user: User
-    private var chats = [Chat]()
+    private var chats = [Chat]() {
+        didSet {
+            if oldValue.count > chats.count {
+                tableView.reloadData()
+            } else {
+                tableView.reload(oldValue: oldValue, newValue: chats)
+            }
+        }
+    }
     
     init(user: User) {
         self.user = user
@@ -68,13 +76,7 @@ private extension ChatListViewController {
     func listenForChatList() {
         DatabaseManager.shared.getAllChats(fromEmail: user.email) { [weak self] chats in
             guard let self = self else { return }
-            let oldValue = self.chats
             self.chats = chats
-            if oldValue == self.chats {
-                self.tableView.reloadData()
-            } else {
-                self.tableView.reload(oldValue: oldValue, newValue: chats)
-            }
         }
     }
     
@@ -98,6 +100,14 @@ private extension ChatListViewController {
         let newChatVC = NewChatViewController(currentEmail: user.email)
         newChatVC.delegate = self
         present(NavigationController(rootViewController: newChatVC), animated: true)
+    }
+    
+    func deleteChat(atIndex index: Int) {
+        DatabaseManager.shared.deleteChat(fromUser: user, chatId: chats[index].id) { [weak self] success in
+            if !success {
+                self?.showAlert(msg: "Some error occured!")
+            }
+        }
     }
 }
 
@@ -136,6 +146,16 @@ extension ChatListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showChat(chat: chats[indexPath.row])
+    }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash.fill"), attributes: .destructive, handler: {_ in
+                self.deleteChat(atIndex: indexPath.row)
+            })
+            
+            return UIMenu(title: "", children: [deleteAction])
+        }
     }
 }
 
