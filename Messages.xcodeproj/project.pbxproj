@@ -733,8 +733,8 @@
 			baseConfigurationReference = BBF915800DDB1E52237A789C /* Pods-Messages.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = KK338VVZ82;
 				INFOPLIST_FILE = Messages/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -744,7 +744,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = anhlh.iMessages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = MessagesDev;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -755,8 +755,8 @@
 			baseConfigurationReference = 0A26592820BE877709CE51F2 /* Pods-Messages.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = KK338VVZ82;
 				INFOPLIST_FILE = Messages/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -766,7 +766,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = anhlh.iMessages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = MessagesDev;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -10,6 +10,7 @@ import UIKit
 import MessageKit
 import InputBarAccessoryView
 import AVKit
+import CoreLocation
 
 struct Sender: SenderType {
     let senderId: String
@@ -34,6 +35,8 @@ final class ChatViewController: MessagesViewController {
     
     private var chatId: String?
     
+    private let locationManager = CLLocationManager()
+    
     init(chatId: String?, me: User, partner: User) {
         self.chatId = chatId
         self.me = me
@@ -53,6 +56,7 @@ final class ChatViewController: MessagesViewController {
         listenToMessages()
         setupInputButtons()
         navigationController?.navigationBar.tintColor = .text
+        locationManager.delegate = self
     }
 }
 
@@ -86,7 +90,7 @@ private extension ChatViewController {
         gallery.setImage(.iconGallery, for: .normal)
         
         location.onTouchUpInside { _ in
-            
+            self.handlerShareLocation()
         }
         camera.onTouchUpInside { _ in
             self.showPickerImage(sourceType: .camera)
@@ -138,6 +142,14 @@ private extension ChatViewController {
         present(picker, animated: true)
     }
     
+    func handlerShareLocation() {
+        PermissionManager.checkForLocation(locationManager) { [weak self] available in
+            if available {
+                self?.locationManager.startUpdatingLocation()
+            }
+        }
+    }
+    
     func processUploadImage(withImageData imageData: Data) {
         let msgId = createMessageId()
         showLoading(in: view)
@@ -173,6 +185,12 @@ private extension ChatViewController {
             }
         }
     }
+    
+    func playVideo(withUrl url: URL) {
+        let vc = AVPlayerViewController()
+        vc.player = AVPlayer(url: url)
+        present(vc, animated: true)
+    }
 }
 
 extension ChatViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
@@ -186,6 +204,7 @@ extension ChatViewController: UIImagePickerControllerDelegate & UINavigationCont
     }
 }
 
+// MARK: - MessageCellDelegate
 extension ChatViewController: MessageCellDelegate {
     
     func didTapImage(in cell: MessageCollectionViewCell) {
@@ -198,25 +217,18 @@ extension ChatViewController: MessageCellDelegate {
         switch message.kind {
         case .photo:
             break
-//            guard let imageUrl = media.url else {
-//                return
-//            }
-//            let vc = PhotoViewerViewController(with: imageUrl)
-//            navigationController?.pushViewController(vc, animated: true)
         case .video(let media):
             guard let videoUrl = media.url else {
                 return
             }
-
-            let vc = AVPlayerViewController()
-            vc.player = AVPlayer(url: videoUrl)
-            present(vc, animated: true)
+            playVideo(withUrl: videoUrl)
         default:
             break
         }
     }
 }
 
+// MARK: - MessagesLayoutDelegate
 extension ChatViewController: MessagesLayoutDelegate {
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         guard let message = message as? Message else {
@@ -271,5 +283,21 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         
         let message = Message(sender: meSender, messageId: createMessageId(), sentDate: Date(), kind: .text(text))
         sendMessage(message: message)
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+extension ChatViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        manager.stopUpdatingLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        
+        guard status == .authorizedWhenInUse else {
+            return
+        }
+        
+        locationManager.startUpdatingLocation()
     }
 }
