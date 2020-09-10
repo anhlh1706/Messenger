@@ -25,7 +25,6 @@
 		E617511124E383DB00DEDDE4 /* SPAnimationSpring.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750E424E383DA00DEDDE4 /* SPAnimationSpring.swift */; };
 		E617511224E383DB00DEDDE4 /* SPAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750E524E383DA00DEDDE4 /* SPAnimation.swift */; };
 		E617511324E383DB00DEDDE4 /* SPSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750E624E383DA00DEDDE4 /* SPSegmentedControl.swift */; };
-		E617511624E383DB00DEDDE4 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EA24E383DA00DEDDE4 /* Config.swift */; };
 		E617511724E383DB00DEDDE4 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EB24E383DA00DEDDE4 /* AppHelper.swift */; };
 		E617511824E383DB00DEDDE4 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750ED24E383DA00DEDDE4 /* Date.swift */; };
 		E617511924E383DB00DEDDE4 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EE24E383DA00DEDDE4 /* UIView.swift */; };
@@ -98,9 +97,6 @@
 		E61750E424E383DA00DEDDE4 /* SPAnimationSpring.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimationSpring.swift; sourceTree = "<group>"; };
 		E61750E524E383DA00DEDDE4 /* SPAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPAnimation.swift; sourceTree = "<group>"; };
 		E61750E624E383DA00DEDDE4 /* SPSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SPSegmentedControl.swift; sourceTree = "<group>"; };
-		E61750E824E383DA00DEDDE4 /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
-		E61750E924E383DA00DEDDE4 /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		E61750EA24E383DA00DEDDE4 /* Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		E61750EB24E383DA00DEDDE4 /* AppHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppHelper.swift; sourceTree = "<group>"; };
 		E61750ED24E383DA00DEDDE4 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		E61750EE24E383DA00DEDDE4 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -205,9 +201,9 @@
 		E61750CE24E383CB00DEDDE4 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				E6D65B8B24E631D8001182DC /* GoogleService-Info.plist */,
 				E61750EB24E383DA00DEDDE4 /* AppHelper.swift */,
 				E61750D624E383DA00DEDDE4 /* BaseView */,
-				E61750E724E383DA00DEDDE4 /* Config */,
 				E61750EC24E383DA00DEDDE4 /* Extension */,
 				E61750D124E383D900DEDDE4 /* R */,
 			);
@@ -279,17 +275,6 @@
 				E61750E524E383DA00DEDDE4 /* SPAnimation.swift */,
 			);
 			path = Animation;
-			sourceTree = "<group>";
-		};
-		E61750E724E383DA00DEDDE4 /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				E6D65B8A24E63193001182DC /* FirebaseConfig */,
-				E61750E824E383DA00DEDDE4 /* Debug.xcconfig */,
-				E61750E924E383DA00DEDDE4 /* Release.xcconfig */,
-				E61750EA24E383DA00DEDDE4 /* Config.swift */,
-			);
-			path = Config;
 			sourceTree = "<group>";
 		};
 		E61750EC24E383DA00DEDDE4 /* Extension */ = {
@@ -381,14 +366,6 @@
 				E6B050D124F3BED200F9C167 /* LocationPickerViewController.swift */,
 			);
 			path = Chat;
-			sourceTree = "<group>";
-		};
-		E6D65B8A24E63193001182DC /* FirebaseConfig */ = {
-			isa = PBXGroup;
-			children = (
-				E6D65B8B24E631D8001182DC /* GoogleService-Info.plist */,
-			);
-			path = FirebaseConfig;
 			sourceTree = "<group>";
 		};
 		F9D49B4FDA3F367472766201 /* Pods */ = {
@@ -584,7 +561,6 @@
 				E6D65B9224E64020001182DC /* NavigationController.swift in Sources */,
 				E617511124E383DB00DEDDE4 /* SPAnimationSpring.swift in Sources */,
 				E617512024E383DB00DEDDE4 /* UICollectionView.swift in Sources */,
-				E617511624E383DB00DEDDE4 /* Config.swift in Sources */,
 				E617511D24E383DB00DEDDE4 /* UIStackView.swift in Sources */,
 				E679A8DD24E6212300DEAD72 /* SplashViewController.swift in Sources */,
 				E617512724E383DB00DEDDE4 /* UserDefaults.swift in Sources */,
