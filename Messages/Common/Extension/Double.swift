@@ -10,24 +10,15 @@ import Foundation
 
 extension Double {
     func currencyStr() -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.groupingSize = 3
-        numberFormatter.maximumFractionDigits = 2
-        numberFormatter.minimumFractionDigits = 2
-        numberFormatter.usesGroupingSeparator = true
-        numberFormatter.decimalSeparator = "."
-        numberFormatter.numberStyle = .decimal
-        return "$" + (numberFormatter.string(from: self as NSNumber) ?? "0.00")
+        let priceFormatter = NumberFormatter()
+        priceFormatter.locale = Locale(identifier: "en_US") // jp: "zh_CN"
+        priceFormatter.numberStyle = .currency
+        return priceFormatter.string(from: NSNumber(value: self)) ?? "0"
     }
     
-    func currency() -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.groupingSize = 3
-        numberFormatter.maximumFractionDigits = 2
-        numberFormatter.minimumFractionDigits = 2
-        numberFormatter.usesGroupingSeparator = true
-        numberFormatter.decimalSeparator = "."
-        numberFormatter.numberStyle = .decimal
-        return (numberFormatter.string(from: self as NSNumber) ?? "0.00")
+    func numberStr() -> String {
+        let priceFormatter = NumberFormatter()
+        priceFormatter.numberStyle = .decimal
+        return priceFormatter.string(from: NSNumber(value: self)) ?? "0"
     }
 }

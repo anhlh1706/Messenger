@@ -43,7 +43,7 @@ extension AvatarSelectCollectionCell: UIImagePickerControllerDelegate, UINavigat
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let pickedImage = info[.editedImage] as? UIImage {
             let imageSize = CGSize(width: 250, height: 250)
-            imageView.image = pickedImage.scaleToFit(size: imageSize)
+            imageView.image = pickedImage.resizeToFit(size: imageSize)
         }
         picker.dismiss(animated: true, completion: nil)
     }

@@ -300,7 +300,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let pickedImage = info[.editedImage] as? UIImage {
             let imageSize = CGSize(width: 250, height: 250)
-            profileImage = pickedImage.scaleToFit(size: imageSize)
+            profileImage = pickedImage.resizeToFit(size: imageSize)
             if let itemIndex = State.allCases.firstIndex(of: .avatar) {
                 collectionView.reloadItems(at: [IndexPath(item: itemIndex, section: 0)])
             }

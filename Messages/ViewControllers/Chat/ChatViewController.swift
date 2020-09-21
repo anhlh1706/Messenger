@@ -185,12 +185,6 @@ private extension ChatViewController {
             }
         }
     }
-    
-    func playVideo(withUrl url: URL) {
-        let vc = AVPlayerViewController()
-        vc.player = AVPlayer(url: url)
-        present(vc, animated: true)
-    }
 }
 
 extension ChatViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
@@ -204,7 +198,6 @@ extension ChatViewController: UIImagePickerControllerDelegate & UINavigationCont
     }
 }
 
-// MARK: - MessageCellDelegate
 extension ChatViewController: MessageCellDelegate {
     
     func didTapImage(in cell: MessageCollectionViewCell) {
@@ -221,14 +214,16 @@ extension ChatViewController: MessageCellDelegate {
             guard let videoUrl = media.url else {
                 return
             }
-            playVideo(withUrl: videoUrl)
+
+            let vc = AVPlayerViewController()
+            vc.player = AVPlayer(url: videoUrl)
+            present(vc, animated: true)
         default:
             break
         }
     }
 }
 
-// MARK: - MessagesLayoutDelegate
 extension ChatViewController: MessagesLayoutDelegate {
     func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
         guard let message = message as? Message else {

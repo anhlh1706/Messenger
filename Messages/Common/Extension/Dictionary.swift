@@ -10,22 +10,10 @@ import Foundation
 
 extension Dictionary where Key == String, Value == Optional<Any> {
     
-    func filterNilOrEmptyValue() -> Dictionary {
-        
-        var filtered = [String: Any]()
-        for case let (key, value?) in self where value is String {
-            filtered[key] = value
-        }
-        return filtered
-    }
-    
-    
     func asURLParams() -> String {
         var urlString = "?"
         
-        let filtered = filterNilOrEmptyValue()
-        
-        for (key, value) in filtered {
+        for (key, value) in filter({ $0.value != nil }) {
             if let value = value as? Int {
                 urlString += key + "=" + String(value) + "/"
             } else if let value = value as? String {

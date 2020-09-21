@@ -37,23 +37,23 @@ extension UIImage {
         self.init()
     }
     
-    func scaled(toSize size: CGSize) -> UIImage {
+    func resized(toSize size: CGSize) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         defer { UIGraphicsEndImageContext() }
         draw(in: CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height))
         return UIGraphicsGetImageFromCurrentImageContext()!
     }
     
-    func scaleToFit(size: CGSize) -> UIImage {
+    func resizeToFit(size: CGSize) -> UIImage {
         let aspect = self.size.width / self.size.height
         if size.width / aspect <= size.height {
-            return scaled(toSize: CGSize(width: size.width, height: size.width / aspect))
+            return resized(toSize: CGSize(width: size.width, height: size.width / aspect))
         } else {
-            return scaled(toSize: CGSize(width: size.height * aspect, height: size.height))
+            return resized(toSize: CGSize(width: size.height * aspect, height: size.height))
         }
     }
     
-    func resized(withPercentage percentage: CGFloat) -> UIImage? {
+    func scale(withPercentage percentage: CGFloat) -> UIImage? {
         let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
         UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
         defer { UIGraphicsEndImageContext() }
@@ -61,14 +61,14 @@ extension UIImage {
         return UIGraphicsGetImageFromCurrentImageContext()
     }
     
-    func resizedImage() -> UIImage? {
+    func scaledImage() -> UIImage? {
         guard let imageData = pngData() else { return nil }
         
         var resizingImage = self
         var imageSizeKB = Double(imageData.count) / 1000.0 // ! Or devide for 1024 if you need KB but not kB
         
         while imageSizeKB > 5000 { // ! Or use 500 if you need KB but not kB
-            guard let resizedImage = resizingImage.resized(withPercentage: 0.8),
+            guard let resizedImage = resizingImage.scale(withPercentage: 0.8),
                 let imageData = resizedImage.pngData()
                 else { return nil }
             

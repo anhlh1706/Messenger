@@ -34,8 +34,8 @@ final class ChatTabbarController: UITabBarController {
         let chatsVC         = ChatListViewController(user: user)
         let profileVC       = ProfileViewController()
         
-        chatsVC.tabBarItem    = UITabBarItem(title: Text.chats, image: UIImage.logo.scaleToFit(size: tabBarIconSize), tag: 0)
-        profileVC.tabBarItem   = UITabBarItem(title: Text.profile, image: UIImage.iconUser.scaleToFit(size: tabBarIconSize), tag: 1)
+        chatsVC.tabBarItem    = UITabBarItem(title: Text.chats, image: UIImage.logo.resizeToFit(size: tabBarIconSize), tag: 0)
+        profileVC.tabBarItem   = UITabBarItem(title: Text.profile, image: UIImage.iconUser.resizeToFit(size: tabBarIconSize), tag: 1)
         
         viewControllers = [
             NavigationController(rootViewController: chatsVC),
