@@ -10,17 +10,17 @@ import UIKit
 import Anchorage
 import FirebaseAuth
 
-final class RegisterViewController: UIViewController {
+final class RegisterViewController: ViewController {
     
     // MARK: - UI Elements
     
     private let layout = UICollectionViewFlowLayout()
     private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     
-    private let emailTitle = Label(text: Text.email, textAlignment: .center)
-    private let nameTitle = Label(text: Text.name, textAlignment: .center)
-    private let passwordTitle = Label(text: Text.password, textAlignment: .center)
-    private let avatarTitle = Label(text: Text.avatar, textAlignment: .center)
+    private let emailTitle      = Label(text: Text.email, textAlignment: .center)
+    private let nameTitle       = Label(text: Text.name, textAlignment: .center)
+    private let passwordTitle   = Label(text: Text.password, textAlignment: .center)
+    private let avatarTitle     = Label(text: Text.avatar, textAlignment: .center)
     
     private let backButton = Button(type: .contained(rounder: 18, color: .subbackground))
     private let nextButton = Button(type: .contained(rounder: 12, color: .subbackground), title: Text.next)
@@ -68,14 +68,10 @@ final class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        
     }
-}
 
-// MARK: - Private functions
-private extension RegisterViewController {
-    
-    func setupView() {
+    override func setupView() {
         // MARK: - Setup view position
         
         view.addSubview(backButton)
@@ -118,33 +114,41 @@ private extension RegisterViewController {
             $0.spacing = 1.2
         }
         
-        collectionView.backgroundColor = .background
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(cell: SingleTextFieldCollectionCell.self)
         collectionView.register(cell: DoubleTextFieldCollectionCell.self)
         collectionView.register(cell: AvatarSelectCollectionCell.self)
         collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = .background
         layout.scrollDirection = .horizontal
         
         backButton.alpha = 0
         backButton.tintColor = .subtext
         backButton.setImage(.iconBack, for: .normal)
         
-        backButton.addTarget(self, action: #selector(backStep), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
-        
         nextButton.spacing = 1.5
         nextButton.isEnabled = false
         
         view.backgroundColor = .background
+    }
+    
+    override func setupInteraction() {
+        backButton.addTarget(self, action: #selector(backStepAction), for: .touchUpInside)
+        nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
+        
         view.addGestureRecognizer(UITapGestureRecognizer(target: view, action: .endEditing))
+        
+        presentationController?.delegate = self
         
         if !UIDevice.isIphoneXSeries {
             configCloseButton()
         }
-        presentationController?.delegate = self
     }
+}
+
+// MARK: - Private functions
+private extension RegisterViewController {
     
     func updateTitlesState() {
         let transformY = CGFloat(currentStepIndex * -80)
@@ -193,6 +197,7 @@ private extension RegisterViewController {
         closeButton.tintColor = .text
         closeButton.setImage(.iconX, for: .normal)
         closeButton.addTarget(self, action: #selector(close), for: .touchUpInside)
+        
         view.addSubview(closeButton)
         closeButton.topAnchor == view.safeAreaLayoutGuide.topAnchor + 10
         closeButton.trailingAnchor == view.trailingAnchor - 15
@@ -204,7 +209,12 @@ private extension RegisterViewController {
 private extension RegisterViewController {
     
     @objc
-    func backStep() {
+    func close() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @objc
+    func backStepAction() {
         currentStepIndex -= 1
     }
     
@@ -212,7 +222,7 @@ private extension RegisterViewController {
     func nextAction() {
         switch states[currentStepIndex] {
         case .email:
-            checkEmailIsExist()
+            startCheckingEmail()
         case .name:
             currentStepIndex += 1
         case .password:
@@ -223,9 +233,21 @@ private extension RegisterViewController {
         }
     }
     
-    @objc
-    func close() {
-        dismiss(animated: true, completion: nil)
+    func startCheckingEmail() {
+        showLoading(in: view)
+        view.endEditing(false)
+        DatabaseManager.shared.checkEmailIsExists(email: email) { [weak self] available in
+            guard let self = self else { return }
+            self.hideLoading(for: self.view)
+            if available {
+                self.currentStepIndex += 1
+            } else {
+                self.showAlert(msg: Text.alreadyExistsEmailMsg) {
+                    let emailField = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 0))?.viewWithTag(11)
+                    emailField?.becomeFirstResponder()
+                }
+            }
+        }
     }
     
     @objc
@@ -275,23 +297,6 @@ private extension RegisterViewController {
         imagePicker.allowsEditing = true
         imagePicker.sourceType = sourceType
         present(imagePicker, animated: true, completion: nil)
-    }
-    
-    func checkEmailIsExist() {
-        showLoading(in: view)
-        view.endEditing(false)
-        DatabaseManager.shared.checkEmailIsExists(email: email) { [weak self] available in
-            guard let self = self else { return }
-            self.hideLoading(for: self.view)
-            if available {
-                self.currentStepIndex += 1
-            } else {
-                self.showAlert(msg: Text.alreadyExistsEmailMsg) {
-                    let emailField = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 0))?.viewWithTag(11)
-                    emailField?.becomeFirstResponder()
-                }
-            }
-        }
     }
 }
 
