@@ -10,7 +10,7 @@ import UIKit
 import Anchorage
 import SDWebImage
 
-final class ChatListViewController: UIViewController {
+final class ChatListViewController: ViewController {
     
     private let tableView = UITableView(frame: .zero, style: .plain)
     
@@ -36,15 +36,10 @@ final class ChatListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         listenForChatList()
     }
-}
-
-// MARK: - Private functions
-private extension ChatListViewController {
     
-    func setupView() {
+    override func setupView() {
         view.addSubview(tableView)
         tableView.edgeAnchors == view.edgeAnchors
         
@@ -72,6 +67,10 @@ private extension ChatListViewController {
         navigationItem.leftBarButtonItem = leftBarButton
         navigationItem.backBarButtonItem?.tintColor = .text
     }
+}
+
+// MARK: - Private functions
+private extension ChatListViewController {
     
     func listenForChatList() {
         DatabaseManager.shared.getAllChats(fromEmail: user.email) { [weak self] chats in
