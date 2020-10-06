@@ -28,7 +28,7 @@
 		E617511724E383DB00DEDDE4 /* AppHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EB24E383DA00DEDDE4 /* AppHelper.swift */; };
 		E617511824E383DB00DEDDE4 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750ED24E383DA00DEDDE4 /* Date.swift */; };
 		E617511924E383DB00DEDDE4 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EE24E383DA00DEDDE4 /* UIView.swift */; };
-		E617511A24E383DB00DEDDE4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EF24E383DA00DEDDE4 /* ViewController.swift */; };
+		E617511A24E383DB00DEDDE4 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750EF24E383DA00DEDDE4 /* UIViewController.swift */; };
 		E617511B24E383DB00DEDDE4 /* KeychainAccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750F024E383DA00DEDDE4 /* KeychainAccess.swift */; };
 		E617511C24E383DB00DEDDE4 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750F124E383DA00DEDDE4 /* Array.swift */; };
 		E617511D24E383DB00DEDDE4 /* UIStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61750F224E383DA00DEDDE4 /* UIStackView.swift */; };
@@ -58,6 +58,7 @@
 		E660B05324E4502E007CDCA6 /* SingleTextFieldCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660B05224E4502E007CDCA6 /* SingleTextFieldCollectionCell.swift */; };
 		E660B05524E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E660B05424E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift */; };
 		E679A8DD24E6212300DEAD72 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679A8DC24E6212300DEAD72 /* SplashViewController.swift */; };
+		E679D2E7252CACD900709BD8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E679D2E6252CACD900709BD8 /* ViewController.swift */; };
 		E68D11EB24EB791D00BFBF6D /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D11EA24EB791D00BFBF6D /* Chat.swift */; };
 		E68D11ED24EB8EB500BFBF6D /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68D11EC24EB8EB500BFBF6D /* Message.swift */; };
 		E693703624EBE128004B6F64 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693703524EBE128004B6F64 /* UserManager.swift */; };
@@ -100,7 +101,7 @@
 		E61750EB24E383DA00DEDDE4 /* AppHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppHelper.swift; sourceTree = "<group>"; };
 		E61750ED24E383DA00DEDDE4 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		E61750EE24E383DA00DEDDE4 /* UIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
-		E61750EF24E383DA00DEDDE4 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E61750EF24E383DA00DEDDE4 /* UIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		E61750F024E383DA00DEDDE4 /* KeychainAccess.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainAccess.swift; sourceTree = "<group>"; };
 		E61750F124E383DA00DEDDE4 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		E61750F224E383DA00DEDDE4 /* UIStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIStackView.swift; sourceTree = "<group>"; };
@@ -130,6 +131,7 @@
 		E660B05224E4502E007CDCA6 /* SingleTextFieldCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleTextFieldCollectionCell.swift; sourceTree = "<group>"; };
 		E660B05424E45184007CDCA6 /* DoubleTextFieldCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoubleTextFieldCollectionCell.swift; sourceTree = "<group>"; };
 		E679A8DC24E6212300DEAD72 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		E679D2E6252CACD900709BD8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E68D11EA24EB791D00BFBF6D /* Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
 		E68D11EC24EB8EB500BFBF6D /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E693703524EBE128004B6F64 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				E61750DE24E383DA00DEDDE4 /* LoadingView.swift */,
 				E617514F24E3943100DEDDE4 /* TextField.swift */,
 				E6D65B9124E64020001182DC /* NavigationController.swift */,
+				E679D2E6252CACD900709BD8 /* ViewController.swift */,
 			);
 			path = BaseView;
 			sourceTree = "<group>";
@@ -282,7 +285,7 @@
 			children = (
 				E61750ED24E383DA00DEDDE4 /* Date.swift */,
 				E61750EE24E383DA00DEDDE4 /* UIView.swift */,
-				E61750EF24E383DA00DEDDE4 /* ViewController.swift */,
+				E61750EF24E383DA00DEDDE4 /* UIViewController.swift */,
 				E61750F024E383DA00DEDDE4 /* KeychainAccess.swift */,
 				E61750F124E383DA00DEDDE4 /* Array.swift */,
 				E61750F224E383DA00DEDDE4 /* UIStackView.swift */,
@@ -511,7 +514,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E617511A24E383DB00DEDDE4 /* ViewController.swift in Sources */,
+				E617511A24E383DB00DEDDE4 /* UIViewController.swift in Sources */,
 				E617512324E383DB00DEDDE4 /* UIDevice.swift in Sources */,
 				E617511824E383DB00DEDDE4 /* Date.swift in Sources */,
 				E6B050D424F3C1A800F9C167 /* PermissionManager.swift in Sources */,
@@ -567,6 +570,7 @@
 				E617510724E383DB00DEDDE4 /* Label.swift in Sources */,
 				E617512A24E383DB00DEDDE4 /* Double.swift in Sources */,
 				E68D11EB24EB791D00BFBF6D /* Chat.swift in Sources */,
+				E679D2E7252CACD900709BD8 /* ViewController.swift in Sources */,
 				E617512224E383DB00DEDDE4 /* UITableView.swift in Sources */,
 				E617510C24E383DB00DEDDE4 /* Button.swift in Sources */,
 				E61750BB24E3837100DEDDE4 /* AppDelegate.swift in Sources */,

@@ -23,6 +23,7 @@ final class ChatTabbarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBar.backgroundColor = UIColor.background.withAlphaComponent(0.97)
         tabBar.tintColor = .primary
         tabBar.barTintColor = .background
         tabBar.shadowImage = UIImage()

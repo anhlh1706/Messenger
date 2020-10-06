@@ -12,7 +12,7 @@ import FirebaseAuth
 import FBSDKLoginKit
 import GoogleSignIn
 
-final class LoginViewController: UIViewController {
+final class LoginViewController: ViewController {
     
     deinit {
         if animator.state == .active {
@@ -31,7 +31,7 @@ final class LoginViewController: UIViewController {
     private let fbLoginButton = Button(type: .outlined(rounder: 12, color: .text), title: Text.loginWithFacebook)
     private let googleLoginButton = Button(type: .outlined(rounder: 12, color: .text), title: Text.loginWithGoogle)
     private let registerButton = Button(type: .contained(rounder: 12, color: .subbackground), title: Text.register)
-    
+     
     private lazy var textFields = [emailField, passwordField]
     private lazy var buttons = [loginButton, fbLoginButton, googleLoginButton, registerButton]
     
@@ -41,7 +41,6 @@ final class LoginViewController: UIViewController {
     // MARK: - View lyfeCicle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.presentingViewController = self
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -57,12 +56,8 @@ final class LoginViewController: UIViewController {
         emailField.roundCorners(cornerRadius: 12, corners: [.topLeft, .topRight])
         passwordField.roundCorners(cornerRadius: 12, corners: [.bottomLeft, .bottomRight])
     }
-}
-
-// MARK: - Private funtions
-private extension LoginViewController {
     
-    func setupView() {
+    override func setupView() {
         // MARK: - Setup view position
         let logoSize: CGSize = UIDevice.isIphone8 ? .init(width: 140, height: 140) : .init(width: 180, height: 180)
         let logoTopSpacing: CGFloat = UIDevice.isIphoneXSeries ? 80 : 50
@@ -103,9 +98,6 @@ private extension LoginViewController {
         registerButton.heightAnchor == 50
         
         // MARK: - Setup view properties
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        view.addGestureRecognizer(tap)
         view.backgroundColor = .background
         
         logo.contentMode = .scaleAspectFit
@@ -122,11 +114,6 @@ private extension LoginViewController {
             $0.leftPadding = 12
             $0.addTarget(self, action: #selector(updateLoginButtonState), for: .editingChanged)
         }
-        
-        loginButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
-        fbLoginButton.addTarget(self, action: #selector(fbLoginAction), for: .touchUpInside)
-        googleLoginButton.addTarget(self, action: #selector(ggLoginAction), for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(registerAction), for: .touchUpInside)
         
         buttons.forEach { $0.spacing = 1.5 }
         
@@ -153,6 +140,20 @@ private extension LoginViewController {
             self.buttons.forEach { $0.transform = transform }
         }
     }
+    
+    override func setupInteraction() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tap)
+                
+        loginButton.addTarget(self, action: #selector(loginAction), for: .touchUpInside)
+        fbLoginButton.addTarget(self, action: #selector(fbLoginAction), for: .touchUpInside)
+        googleLoginButton.addTarget(self, action: #selector(ggLoginAction), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(registerAction), for: .touchUpInside)
+    }
+}
+
+// MARK: - Private funtions
+private extension LoginViewController {
     
     @objc
     func updateLoginButtonState() {

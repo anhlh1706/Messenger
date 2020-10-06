@@ -426,6 +426,8 @@ private extension RegisterViewController {
         let cell = collectionView.dequeueReusableCell(cell: DoubleTextFieldCollectionCell.self, indexPath: indexPath)
         cell.setPlaceholder(first: Text.password, second: Text.confirmPassword)
         cell.setDelegate(target: self)
+        cell.firstTextField.isSecureTextEntry = true
+        cell.secondTextField.isSecureTextEntry = true
         return cell
     }
     

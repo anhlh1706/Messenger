@@ -11,7 +11,7 @@ import Anchorage
 
 final class SingleTextFieldCollectionCell: UICollectionViewCell {
     
-    private let textField = TextField()
+    private(set) var textField = TextField()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

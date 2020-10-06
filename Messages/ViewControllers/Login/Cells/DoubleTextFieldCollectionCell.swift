@@ -11,8 +11,8 @@ import Anchorage
 
 final class DoubleTextFieldCollectionCell: UICollectionViewCell {
     
-    private let firstTextField = TextField()
-    private let secondTextField = TextField()
+    private(set) var firstTextField = TextField()
+    private(set) var secondTextField = TextField()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
